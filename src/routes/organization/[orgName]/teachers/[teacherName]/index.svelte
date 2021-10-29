@@ -21,7 +21,7 @@
 
   var studentList = [];
   var productSuperList = [];
-  let cbNum;
+  let test;
   onMount(async () => {
     studentList = await getTeacherSubCollections(
       $page.params.orgName,
@@ -52,16 +52,14 @@
 <ListGroup>
   <h4>Students:</h4>
   {#each studentList as student}
-    <h3>{student.name}</h3>
+    <h5>{student.name}</h5>
     <ListGroupItem tag="button">{student.name}</ListGroupItem>
     <FormGroup>
-      <Label for="text">CoderBucks To assign</Label>
       <Input
         type="number"
         name="cbNumInput"
         id="cbNumInputId"
-        bind:value={cbNum}
-        placeholder="School Name"
+        placeholder="CoderBucks To assign"
       />
     </FormGroup>
   {/each}
