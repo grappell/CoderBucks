@@ -82,6 +82,9 @@
                         email: email,
                         tMail: tMail,
                         coderBucksValue: 0,
+                        path: `/organization/${targetOrgName}/teachers/${indexTargetTName}/students/${slugify(
+                          name
+                        )}`,
                         userId: $authStore.userId,
                       });
                   });
