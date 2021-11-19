@@ -81,16 +81,22 @@
                         name: name,
                         email: email,
                         tMail: tMail,
-                        coderBucksValue: 0,
-                        path: `/organization/${targetOrgName}/teachers/${indexTargetTName}/students/${slugify(
-                          name
-                        )}`,
+                        coderBucksObject: {
+                          [tMail]: {
+                            coderBucksValue: 0,
+                            path: `/organization/${targetOrgName}/teachers/${indexTargetTName}/students/${slugify(
+                              name
+                            )}`,
+                          },
+                        },
+                        orgName: targetOrgName,
                         userId: $authStore.userId,
                       });
                   });
                 });
             });
           });
+
         await goto("/");
       }
       errorMessage = "";

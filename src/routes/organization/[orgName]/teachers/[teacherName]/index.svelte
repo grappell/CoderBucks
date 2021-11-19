@@ -11,6 +11,7 @@
     Button,
     ListGroup,
     ListGroupItem,
+    Alert,
   } from "sveltestrap/src";
   import Product from "../../../../../components/product.svelte";
   const { page } = stores();
@@ -22,22 +23,37 @@
   var studentList = [];
   var productSuperList = [];
   let studentInput = {};
+  let dbPath;
+  let teacherPath;
+  let errorMessage = "";
+  let sucessMessage = "";
   onMount(async () => {
-    studentList = await getTeacherSubCollections(
-      $page.params.orgName,
-      $page.params.teacherName,
-      "students"
-    );
-    productSuperList = chunk(
-      3,
-      await getTeacherSubCollections(
+    var db = firebase.firestore();
+
+    teacherPath =
+      "organization/" +
+      $page.params.orgName +
+      "/teachers/" +
+      $page.params.teacherName +
+      "/students";
+
+    db.collection(teacherPath).onSnapshot(async (querySnapshot) => {
+      studentList = await getTeacherSubCollections(
         $page.params.orgName,
         $page.params.teacherName,
-        "products"
-      )
-    );
-    studentList.forEach((element) => {
-      studentInput[element.name] = "";
+        "students"
+      );
+      productSuperList = chunk(
+        3,
+        await getTeacherSubCollections(
+          $page.params.orgName,
+          $page.params.teacherName,
+          "products"
+        )
+      );
+      studentList.forEach((element) => {
+        studentInput[element.name] = "";
+      });
     });
   });
 
@@ -50,20 +66,22 @@
 
   async function submit(student) {
     var db = firebase.firestore();
-    let dbPath = student.path;
+    dbPath = student.path;
     let currentCBValue = student.coderBucksValue;
     await db
       .doc(dbPath)
       .update({
-        coderBucksValue: currentCBValue + studentList[student.name],
+        coderBucksValue: currentCBValue + parseInt(studentInput[student.name]),
       })
       .then(() => {
-        console.log("Document successfully updated!");
         studentList[student.name] = "";
-        window.reload();
+        sucessMessage = "Sucessfully added coderbucks";
+        errorMessage = "";
       })
       .catch((error) => {
         console.error("Error updating document: ", error);
+        errorMessage = "Error adding coderbucks";
+        sucessMessage = "";
       });
   }
 </script>
@@ -86,7 +104,7 @@
         name="cbNumInput"
         id="cbNumInputId"
         placeholder="CoderBucks To assign"
-        bind:value={studentList[student.name]}
+        bind:value={studentInput[student.name]}
       />
     </FormGroup>
     <Button
@@ -97,6 +115,13 @@
       on:click={submit(student)}
       size="block">Submit</Button
     >
+    {#if errorMessage != ""}
+      <Alert color="danger" dismissible>{errorMessage}</Alert>
+    {/if}
+    {#if sucessMessage != ""}
+      <br />
+      <Alert color="success" dismissible>{sucessMessage}</Alert>
+    {/if}
     <br />
   {/each}
 </ListGroup>
