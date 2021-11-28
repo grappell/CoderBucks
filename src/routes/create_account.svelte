@@ -80,7 +80,6 @@
                       .set({
                         name: name,
                         email: email,
-                        tMail: tMail,
                         coderBucksObject: {
                           [tMail]: {
                             coderBucksValue: 0,
@@ -92,12 +91,18 @@
                         orgName: targetOrgName,
                         userId: $authStore.userId,
                       });
+                    authStore.update(
+                      (studentPath) =>
+                        `/organization/${targetOrgName}/teachers/${indexTargetTName}/students/${slugify(
+                          name
+                        )}`
+                      // this not updateing, need to fix. Currentally returning undefined
+                    );
                   });
                 });
             });
           });
-
-        await goto("/");
+        await goto("/student_homepage");
       }
       errorMessage = "";
       sucessMessage = "Success! Redirecting...";

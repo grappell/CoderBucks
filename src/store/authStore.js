@@ -5,6 +5,7 @@ const authStore = writable({
   fierbaseOn: false,
   isLogedIn: false,
   isStudent: false,
+  studentPath: undefined,
 });
 
 export default authStore;
