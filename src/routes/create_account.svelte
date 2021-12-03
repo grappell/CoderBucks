@@ -91,18 +91,14 @@
                         orgName: targetOrgName,
                         userId: $authStore.userId,
                       });
-                    authStore.update(
-                      (studentPath) =>
-                        `/organization/${targetOrgName}/teachers/${indexTargetTName}/students/${slugify(
-                          name
-                        )}`
-                      // this not updateing, need to fix. Currentally returning undefined
-                    );
+                    $authStore.studentPath = `/organization/${targetOrgName}/teachers/${indexTargetTName}/students/${slugify(
+                      name
+                    )}`;
+                    await goto("/student_homepage");
                   });
                 });
             });
           });
-        await goto("/student_homepage");
       }
       errorMessage = "";
       sucessMessage = "Success! Redirecting...";

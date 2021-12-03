@@ -80,6 +80,10 @@
   @import url("https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@496&display=swap");
   :global(body) {
     font-family: "Roboto Mono", monospace;
-    background-color: lightgray; /* need to settle on a background color... */
+    background-color: rgb(
+      236,
+      236,
+      236
+    ); /* need to settle on a background color... */
   }
 </style>
