@@ -12,6 +12,7 @@
     var orgCode = event.detail.orgCode;
     var tMail = event.detail.tMail;
     var name = event.detail.name;
+    var studentOrgCode = event.detail.studentOrgCode;
     try {
       var db = firebase.firestore();
       await firebase.auth().createUserWithEmailAndPassword(email, password);
@@ -23,6 +24,7 @@
           .where("orgCode", "==", orgCode)
           .get()
           .then((data) => {
+            console.log(data);
             data.forEach((element) => {
               targetOrgName = element.data().name;
             });
@@ -49,55 +51,71 @@
         let targetOrgName = "";
         let targetTeachName = "";
 
+        // await db
+        //   .collection("organization")
+        //   .get()
+        //   .then((data) => {
+        //     data.forEach(async (element) => {
+        //       targetOrgName = element.data().name;
+        //       console.log("orginisation/" + targetOrgName + "/teachers", tMail);
+        //       await db
+        //         .collection("organization")
+        //         .doc(targetOrgName)
+        //         .collection("teachers")
+        //         .where("email", "==", tMail)
+        //         .get()
+        //         .then((data2) => {
+        //           console.log(data2);
+        //           data2.forEach(async (element2) => {
+        //             targetTeachName = element2.data().name;
+        //             let indexTargetTName = targetTeachName.split(" ").join("-");
+        //             console.log(
+        //               targetTeachName,
+        //               typeof targetTeachName,
+        //               indexTargetTName
+        //             );
+        //             await db
+        //               .collection(
+        //                 `/organization/${targetOrgName}/teachers/${indexTargetTName}/students/`
+        //               )
+        //               .doc(slugify(name))
+        //               .set({
+        //                 name: name,
+        //                 email: email,
+        //                 coderBucksObject: {
+        //                   [tMail]: {
+        //                     coderBucksValue: 0,
+        //                     path: `/organization/${targetOrgName}/teachers/${indexTargetTName}/students/${slugify(
+        //                       name
+        //                     )}`,
+        //                   },
+        //                 },
+        //                 orgName: targetOrgName,
+        //                 userId: $authStore.userId,
+        //               });
+        //             $authStore.studentPath = `/organization/${targetOrgName}/teachers/${indexTargetTName}/students/${slugify(
+        //               name
+        //             )}`;
+        //             await goto("/student_homepage");
+        //           });
+        //         });
+        //     });
+        //   });
+
+        console.log(studentOrgCode);
         await db
           .collection("organization")
+          .where("orgCode", "==", studentOrgCode)
           .get()
           .then((data) => {
-            data.forEach(async (element) => {
-              targetOrgName = element.data().name;
-              console.log("orginisation/" + targetOrgName + "/teachers", tMail);
-              await db
-                .collection("organization")
-                .doc(targetOrgName)
-                .collection("teachers")
-                .where("email", "==", tMail)
-                .get()
-                .then((data2) => {
-                  console.log(data2);
-                  data2.forEach(async (element2) => {
-                    targetTeachName = element2.data().name;
-                    let indexTargetTName = targetTeachName.split(" ").join("-");
-                    console.log(
-                      targetTeachName,
-                      typeof targetTeachName,
-                      indexTargetTName
-                    );
-                    await db
-                      .collection(
-                        `/organization/${targetOrgName}/teachers/${indexTargetTName}/students/`
-                      )
-                      .doc(slugify(name))
-                      .set({
-                        name: name,
-                        email: email,
-                        coderBucksObject: {
-                          [tMail]: {
-                            coderBucksValue: 0,
-                            path: `/organization/${targetOrgName}/teachers/${indexTargetTName}/students/${slugify(
-                              name
-                            )}`,
-                          },
-                        },
-                        orgName: targetOrgName,
-                        userId: $authStore.userId,
-                      });
-                    $authStore.studentPath = `/organization/${targetOrgName}/teachers/${indexTargetTName}/students/${slugify(
-                      name
-                    )}`;
-                    await goto("/student_homepage");
-                  });
-                });
-            });
+            console.log("data1", data);
+            let buffer = data.docs.ref;
+            buffer
+              .where("email", "==", tMail)
+              .get()
+              .then((data2) => {
+                console.log(data2);
+              });
           });
       }
       errorMessage = "";
