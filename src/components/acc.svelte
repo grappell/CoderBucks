@@ -10,7 +10,6 @@
   } from "sveltestrap/src";
   import { onMount } from "svelte";
   import { createEventDispatcher } from "svelte";
-  import Index from "../routes/organization/[orgName]/teachers/[teacherName]/index.svelte";
 
   var email;
   var password;

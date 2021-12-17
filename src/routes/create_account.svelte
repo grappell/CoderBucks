@@ -102,19 +102,41 @@
         //     });
         //   });
 
-        console.log(studentOrgCode);
+        console.log(tMail);
         await db
           .collection("organization")
           .where("orgCode", "==", studentOrgCode)
           .get()
           .then((data) => {
-            console.log("data1", data);
-            let buffer = data.docs.ref;
+            let buffer = data.docs[0].ref.collection("teachers");
             buffer
               .where("email", "==", tMail)
               .get()
-              .then((data2) => {
-                console.log(data2);
+              .then(async (data2) => {
+                let targetOrgName = data.docs[0].id;
+                let targetTeacher = data2.docs[0].id;
+                await db
+                  .collection(
+                    `/organization/${targetOrgName}/teachers/${targetTeacher}/students/`
+                  )
+                  .doc(slugify(name))
+                  .set({
+                    name: name,
+                    email: email,
+                    coderBucksObject: {
+                      [tMail]: {
+                        coderBucksValue: 0,
+                        path: `/organization/${targetOrgName}/teachers/${targetTeacher}/students/${slugify(
+                          name
+                        )}`,
+                      },
+                    },
+                    orgName: targetOrgName,
+                    userId: $authStore.userId,
+                  });
+                $authStore.studentPath = `/organization/${targetOrgName}/teachers/${targetTeacher}/students/${slugify(
+                  name
+                )}`;
               });
           });
       }
