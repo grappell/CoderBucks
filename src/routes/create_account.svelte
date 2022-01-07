@@ -103,43 +103,50 @@
         //   });
 
         console.log(tMail);
+        const arrayUnion = firebase.firestore.FieldValue.arrayUnion;
         await db
           .collection("organization")
           .where("orgCode", "==", studentOrgCode)
           .get()
-          .then((data) => {
+          .then(async (data) => {
+            let targetOrgName = data.docs[0].id;
+            await db
+              .collection(`/organization/${targetOrgName}/students/`)
+              .doc(slugify(name))
+              .set({
+                name: name,
+                email: email,
+                coderBucksObject: {
+                  [tMail]: {
+                    coderBucksValue: 0,
+                    path: `/organization/${targetOrgName}/students/${slugify(
+                      name
+                    )}`,
+                  },
+                },
+                orgName: targetOrgName,
+                userId: $authStore.userId,
+              });
+            $authStore.studentPath = `/organization/${targetOrgName}/students/${slugify(
+              name
+            )}`;
+            // end of setting student
+            // now setting teacher-student ref
             let buffer = data.docs[0].ref.collection("teachers");
             buffer
               .where("email", "==", tMail)
               .get()
               .then(async (data2) => {
-                let targetOrgName = data.docs[0].id;
-                let targetTeacher = data2.docs[0].id;
-                await db
-                  .collection(
-                    `/organization/${targetOrgName}/teachers/${targetTeacher}/students/`
-                  )
-                  .doc(slugify(name))
-                  .set({
-                    name: name,
-                    email: email,
-                    coderBucksObject: {
-                      [tMail]: {
-                        coderBucksValue: 0,
-                        path: `/organization/${targetOrgName}/teachers/${targetTeacher}/students/${slugify(
-                          name
-                        )}`,
-                      },
-                    },
-                    orgName: targetOrgName,
-                    userId: $authStore.userId,
-                  });
-                $authStore.studentPath = `/organization/${targetOrgName}/teachers/${targetTeacher}/students/${slugify(
-                  name
-                )}`;
+                let targetTeacher = data2.docs[0].ref;
+                let studentRef = db.doc(
+                  `/organization/${targetOrgName}/students/${slugify(name)}`
+                );
+                targetTeacher.update({ studentsRef: arrayUnion(studentRef) });
               });
           });
+        //end of .then
       }
+      await goto("/student_homepage");
       errorMessage = "";
       sucessMessage = "Success! Redirecting...";
     } catch (error) {

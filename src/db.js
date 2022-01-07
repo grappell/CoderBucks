@@ -18,6 +18,7 @@ export async function getTeachers(orgName) {
   });
 }
 
+// function obsolite
 export async function getTeacherSubCollections(
   orgName,
   teacherName,

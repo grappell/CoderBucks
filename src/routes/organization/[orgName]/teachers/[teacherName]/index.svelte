@@ -24,7 +24,7 @@
   var productSuperList = [];
   let studentInput = {};
   let dbPath;
-  let teacherPath;
+  let studentPath, teacherPath;
   let errorMessage = "";
   let sucessMessage = "";
   onMount(async () => {
@@ -34,27 +34,33 @@
       "organization/" +
       $page.params.orgName +
       "/teachers/" +
-      $page.params.teacherName +
-      "/students";
+      $page.params.teacherName;
+    studentPath = "organization/" + $page.params.orgName + "/students";
 
-    db.collection(teacherPath).onSnapshot(async (querySnapshot) => {
-      studentList = await getTeacherSubCollections(
-        $page.params.orgName,
-        $page.params.teacherName,
-        "students"
-      );
-      productSuperList = chunk(
-        3,
-        await getTeacherSubCollections(
-          $page.params.orgName,
-          $page.params.teacherName,
-          "products"
-        )
-      );
-      studentList.forEach((element) => {
-        studentInput[element.name] = "";
+    db.collection(studentPath).onSnapshot(async (querySnapshot) => {
+      let teacherRef = await db.doc(teacherPath).get();
+      let teacherData = teacherRef.data();
+      teacherData.studentsRef.forEach(async (element) => {
+        let studentData = await element.get();
+        studentList.push(studentData.data());
       });
     });
+
+    productSuperList = chunk(
+      3,
+      await getTeacherSubCollections(
+        $page.params.orgName,
+        $page.params.teacherName,
+        "products"
+      )
+    );
+    console.log(studentList);
+
+    for (let i = -1; i < studentList.length; i++) {
+      console.log("we have gotten here");
+      console.log(studentList[0]); // somehow not working
+      studentInput[studentList[i + 1].name] = "";
+    }
   });
 
   function chunk(chunkSize, list) {
