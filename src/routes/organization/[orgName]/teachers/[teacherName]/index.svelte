@@ -27,6 +27,7 @@
   let studentPath, teacherPath;
   let errorMessage = "";
   let sucessMessage = "";
+  let tmail;
   onMount(async () => {
     var db = firebase.firestore();
 
@@ -37,13 +38,12 @@
       $page.params.teacherName;
     studentPath = "organization/" + $page.params.orgName + "/students";
 
-    db.collection(studentPath).onSnapshot(async (querySnapshot) => {
-      let teacherRef = await db.doc(teacherPath).get();
-      let teacherData = teacherRef.data();
-      teacherData.studentsRef.forEach(async (element) => {
-        let studentData = await element.get();
-        studentList.push(studentData.data());
-      });
+    let teacherRef = await db.doc(teacherPath).get();
+    let teacherData = teacherRef.data();
+    tmail = teacherData.email;
+    teacherData.studentsRef.forEach(async (element) => {
+      let studentData = await element.get();
+      studentList.push(studentData.data());
     });
 
     productSuperList = chunk(
@@ -54,12 +54,10 @@
         "products"
       )
     );
-    console.log(studentList);
 
-    for (let i = -1; i < studentList.length; i++) {
-      console.log("we have gotten here");
-      console.log(studentList[0]); // somehow not working
-      studentInput[studentList[i + 1].name] = "";
+    for (let i = 0; i < studentList.length; i++) {
+      console.log(studentList, studentList[i]); // somehow not working
+      studentInput[studentList[i].name] = "";
     }
   });
 
@@ -72,12 +70,15 @@
 
   async function submit(student) {
     var db = firebase.firestore();
-    dbPath = student.path;
-    let currentCBValue = student.coderBucksValue;
+    dbPath = student.coderBucksObject[tmail].path;
+    let currentCBValue = student.coderBucksObject[tmail].coderBucksValue;
+    let newCBObject = { ...student.coderBucksObject };
+    newCBObject[tmail].coderBucksValue =
+      currentCBValue + parseInt(studentInput[student.name]);
     await db
       .doc(dbPath)
       .update({
-        coderBucksValue: currentCBValue + parseInt(studentInput[student.name]),
+        coderBucksObject: newCBObject,
       })
       .then(() => {
         studentList[student.name] = "";
@@ -102,7 +103,7 @@
     <ListGroupItem tag="button"
       >{student.name +
         " - CoderBucks In account: " +
-        student.coderBucksValue}</ListGroupItem
+        student.coderBucksObject[tmail].coderBucksValue}</ListGroupItem
     >
     <FormGroup>
       <Input
