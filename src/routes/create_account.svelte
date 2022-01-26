@@ -1,6 +1,6 @@
 <script>
   import Acc from "../components/acc.svelte";
-  import { goto } from "@sapper/app";
+  import { goto, prefetch } from "@sapper/app";
   import authStore from "../store/authStore";
   import { slugify } from "../helper";
 
@@ -42,65 +42,18 @@
             orgCode: orgCode,
             userId: $authStore.userId,
           });
-        setTimeout(async () => {
+
+        prefetch(
+          `/organization/${targetOrgName}/teachers/${docName}/finish_teacher_account`
+        ).then(async () => {
           await goto(
             `/organization/${targetOrgName}/teachers/${docName}/finish_teacher_account`
           );
-        }, 1000);
+        });
+        // something to fix
       } else {
         let targetOrgName = "";
         let targetTeachName = "";
-
-        // await db
-        //   .collection("organization")
-        //   .get()
-        //   .then((data) => {
-        //     data.forEach(async (element) => {
-        //       targetOrgName = element.data().name;
-        //       console.log("orginisation/" + targetOrgName + "/teachers", tMail);
-        //       await db
-        //         .collection("organization")
-        //         .doc(targetOrgName)
-        //         .collection("teachers")
-        //         .where("email", "==", tMail)
-        //         .get()
-        //         .then((data2) => {
-        //           console.log(data2);
-        //           data2.forEach(async (element2) => {
-        //             targetTeachName = element2.data().name;
-        //             let indexTargetTName = targetTeachName.split(" ").join("-");
-        //             console.log(
-        //               targetTeachName,
-        //               typeof targetTeachName,
-        //               indexTargetTName
-        //             );
-        //             await db
-        //               .collection(
-        //                 `/organization/${targetOrgName}/teachers/${indexTargetTName}/students/`
-        //               )
-        //               .doc(slugify(name))
-        //               .set({
-        //                 name: name,
-        //                 email: email,
-        //                 coderBucksObject: {
-        //                   [tMail]: {
-        //                     coderBucksValue: 0,
-        //                     path: `/organization/${targetOrgName}/teachers/${indexTargetTName}/students/${slugify(
-        //                       name
-        //                     )}`,
-        //                   },
-        //                 },
-        //                 orgName: targetOrgName,
-        //                 userId: $authStore.userId,
-        //               });
-        //             $authStore.studentPath = `/organization/${targetOrgName}/teachers/${indexTargetTName}/students/${slugify(
-        //               name
-        //             )}`;
-        //             await goto("/student_homepage");
-        //           });
-        //         });
-        //     });
-        //   });
 
         console.log(tMail);
         const arrayUnion = firebase.firestore.FieldValue.arrayUnion;

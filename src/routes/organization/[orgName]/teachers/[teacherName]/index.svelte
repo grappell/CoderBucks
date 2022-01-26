@@ -122,15 +122,16 @@
       on:click={submit(student)}
       size="block">Submit</Button
     >
-    {#if errorMessage != ""}
-      <Alert color="danger" dismissible>{errorMessage}</Alert>
-    {/if}
-    {#if sucessMessage != ""}
-      <br />
-      <Alert color="success" dismissible>{sucessMessage}</Alert>
-    {/if}
-    <br />
   {/each}
+  {#if errorMessage != ""}
+    <Alert color="danger" dismissible>{errorMessage}</Alert>
+  {/if}
+  {#if sucessMessage != ""}
+    <br />
+    <Alert color="success" dismissible>{sucessMessage}</Alert>
+  {/if}
+  <br />
+  <!-- make the banner on ecach one and somehow make the id original -->
 </ListGroup>
 
 <ListGroup>
