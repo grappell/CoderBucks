@@ -41,11 +41,14 @@
     let teacherRef = await db.doc(teacherPath).get();
     let teacherData = teacherRef.data();
     tmail = teacherData.email;
-    teacherData.studentsRef.forEach(async (element) => {
-      let studentData = await element.get();
-      studentList.push(studentData.data());
-    });
-
+    if (teacherData.studentsRef) {
+      teacherData.studentsRef.forEach(async (element) => {
+        let studentData = await element.get();
+        studentList.push(studentData.data());
+      });
+    } else {
+      alert("No students :(");
+    }
     productSuperList = chunk(
       3,
       await getTeacherSubCollections(
@@ -56,7 +59,7 @@
     );
 
     for (let i = 0; i < studentList.length; i++) {
-      console.log(studentList, studentList[i]); // somehow not working
+      console.log(studentList, studentList[i]);
       studentInput[studentList[i].name] = "";
     }
   });

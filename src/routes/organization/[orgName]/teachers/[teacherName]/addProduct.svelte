@@ -83,12 +83,12 @@
       );
       goto(`/organization/${$page.params.orgName}`);
     }
-    console.log(teacherUID, authStore.userId);
-    if (authStore.userId != teacherUID) {
+    console.log(teacherUID, $authStore.userId);
+    console.log($authStore);
+    if ($authStore.userId != teacherUID) {
       alert("Acounts do not macth");
       goto(`/organization/${$page.params.orgName}`);
     }
-    // auth store problems
   });
 </script>
 

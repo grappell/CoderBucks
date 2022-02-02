@@ -42,7 +42,7 @@
             orgCode: orgCode,
             userId: $authStore.userId,
           });
-
+        $authStore.isStudent = false;
         prefetch(
           `/organization/${targetOrgName}/teachers/${docName}/finish_teacher_account`
         ).then(async () => {
@@ -83,6 +83,7 @@
             $authStore.studentPath = `/organization/${targetOrgName}/students/${slugify(
               name
             )}`;
+            $authStore.isStudent = true;
             // end of setting student
             // now setting teacher-student ref
             let buffer = data.docs[0].ref.collection("teachers");
