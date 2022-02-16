@@ -1,5 +1,5 @@
 <script>
-  export let dimensions = { x: 0, y: 0, roundnes: 10 };
+  export let dimensions;
   export let content;
   export let image;
   export let color;
@@ -26,8 +26,25 @@
     height: var(--width_y);
     border-radius: var(--roundness);
     color: white;
+    font-size: 1vw;
+    -webkit-user-select: none; /* Safari */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE10+/Edge */
+    user-select: none; /* Standard */
   }
   img {
     border-radius: 5px;
+    width: 12vw;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+    pointer-events: none;
+  }
+  h1 {
+    font-size: 2vw;
+  }
+  p {
+    text-align: center;
   }
 </style>

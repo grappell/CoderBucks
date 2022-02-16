@@ -22,6 +22,9 @@
   var submitName;
   let tMail;
   let studentOrgCode;
+
+  let currentURL;
+
   const dispatch = createEventDispatcher();
   function loginWithEmail() {
     if (orgCode) {
@@ -49,7 +52,11 @@
       sucessMessage = "Already Logged In!";
     }
 
-    document.getElementById("teacherForm").style = "display: none";
+    currentURL = window.location.pathname;
+
+    if (currentURL === "./create_account") {
+      document.getElementById("teacherForm").style = "display: none";
+    }
   });
   //do something with the email
 
@@ -118,45 +125,48 @@
   </Col>
 </Row>
 
-<Row>
-  <Col>
-    <FormGroup id="teacherForm">
-      <Label for="teacherCode" id="orgCode">Organization Code</Label>
-      <Input
-        type="text"
-        id="teacherCodeText"
-        placeholder="Organization Code"
-        bind:value={orgCode}
-      />
-    </FormGroup>
-  </Col>
-</Row>
-<Row>
-  <Col>
-    <FormGroup id="studentForm">
-      <Label for="studentTeacherCode" id="tMail">Teacher's Email</Label>
-      <Input
-        type="text"
-        id="studentCodeText"
-        placeholder="Teacher Eamil"
-        bind:value={tMail}
-      />
-    </FormGroup>
-  </Col>
-</Row>
-<Row>
-  <Col>
-    <FormGroup id="studentOrgCode">
-      <Label for="studentOrgCode" id="studentOrgCode">Organization Code</Label>
-      <Input
-        type="text"
-        id="studentCodeText"
-        placeholder="Organization Code"
-        bind:value={studentOrgCode}
-      />
-    </FormGroup>
-  </Col>
-</Row>
+{#if currentURL === "./create_account"}
+  <Row>
+    <Col>
+      <FormGroup id="teacherForm">
+        <Label for="teacherCode" id="orgCode">Organization Code</Label>
+        <Input
+          type="text"
+          id="teacherCodeText"
+          placeholder="Organization Code"
+          bind:value={orgCode}
+        />
+      </FormGroup>
+    </Col>
+  </Row>
+  <Row>
+    <Col>
+      <FormGroup id="studentForm">
+        <Label for="studentTeacherCode" id="tMail">Teacher's Email</Label>
+        <Input
+          type="text"
+          id="studentCodeText"
+          placeholder="Teacher Eamil"
+          bind:value={tMail}
+        />
+      </FormGroup>
+    </Col>
+  </Row>
+  <Row>
+    <Col>
+      <FormGroup id="studentOrgCode">
+        <Label for="studentOrgCode" id="studentOrgCode">Organization Code</Label
+        >
+        <Input
+          type="text"
+          id="studentCodeText"
+          placeholder="Organization Code"
+          bind:value={studentOrgCode}
+        />
+      </FormGroup>
+    </Col>
+  </Row>
+{/if}
 <Row>
   <Col>
     <div>
@@ -182,6 +192,7 @@
   </Col>
 </Row>
 <br />
+<!-- {#if } -->
 <Row>
   <Col style="text-align: center">
     <Button on:click={showTeacher} block id="accTypeButton">
@@ -189,3 +200,6 @@
     </Button>
   </Col>
 </Row>
+<!-- {/if} -->
+
+<!-- if is always coming up as false -->

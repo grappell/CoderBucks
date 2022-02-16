@@ -53,3 +53,11 @@ export async function getOrgCode(orgName) {
     });
   return returnData;
 }
+
+
+export async function getTecherListFromStudent(studentPath){
+  let returnData;
+  let db = firebase.firestore();
+  returnData = await db.doc(studentPath).coderBucksObject.map()
+  console.log(returnData);
+}
