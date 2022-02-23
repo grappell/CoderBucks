@@ -16,7 +16,7 @@
     try {
       var db = firebase.firestore();
       await firebase.auth().createUserWithEmailAndPassword(email, password);
-      if (orgCode != undefined) {
+      if (tMail != undefined) {
         console.log(orgCode);
         let targetOrgName = "";
         await db

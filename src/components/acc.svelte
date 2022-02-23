@@ -27,7 +27,7 @@
 
   const dispatch = createEventDispatcher();
   function loginWithEmail() {
-    if (orgCode) {
+    if (!tMail) {
       dispatch(type, {
         name: submitName,
         email: email,
@@ -54,8 +54,11 @@
 
     currentURL = window.location.pathname;
 
-    if (currentURL === "./create_account") {
-      document.getElementById("teacherForm").style = "display: none";
+    if (currentURL === "/create_account") {
+      let collection = document.getElementsByClassName("makeAcc");
+      for (let i = 0; i < collection.length; i++) {
+        collection[i].style = "display: block;";
+      }
     }
   });
   //do something with the email
@@ -81,20 +84,22 @@
   }
 </script>
 
-<Row>
-  <Col>
-    <FormGroup>
-      <Label>Name</Label>
-      <Input
-        type="text"
-        name="name"
-        id="nameForm"
-        placeholder="Name"
-        bind:value={submitName}
-      />
-    </FormGroup>
-  </Col>
-</Row>
+<div class="makeAcc" style="display: none;">
+  <Row>
+    <Col>
+      <FormGroup>
+        <Label>Name</Label>
+        <Input
+          type="text"
+          name="name"
+          id="nameForm"
+          placeholder="Name"
+          bind:value={submitName}
+        />
+      </FormGroup>
+    </Col>
+  </Row>
+</div>
 <Row>
   <Col>
     <FormGroup>
@@ -125,7 +130,7 @@
   </Col>
 </Row>
 
-{#if currentURL === "./create_account"}
+<div class="makeAcc" style="display: none;">
   <Row>
     <Col>
       <FormGroup id="teacherForm">
@@ -166,40 +171,37 @@
       </FormGroup>
     </Col>
   </Row>
-{/if}
-<Row>
-  <Col>
-    <div>
-      {#if errorMessage != ""}
-        <Alert color="danger" dismissible>{errorMessage}</Alert>
-      {/if}
-
-      {#if sucessMessage != ""}
-        <Alert color="success">{sucessMessage}</Alert>
-      {/if}
-
-      {#if user == null}
-        <Button
-          id="submitButton"
-          outline
-          color="success"
-          class="float-right"
-          on:click={loginWithEmail}
-          size="block">Submit</Button
-        >
-      {/if}
-    </div>
-  </Col>
-</Row>
+  <Row />
+  <Row>
+    <Col style="text-align: center">
+      <Button on:click={showTeacher} block id="accTypeButton">
+        Make a teacher account
+      </Button>
+    </Col>
+  </Row>
+</div>
 <br />
-<!-- {#if } -->
-<Row>
-  <Col style="text-align: center">
-    <Button on:click={showTeacher} block id="accTypeButton">
-      Make a teacher account
-    </Button>
-  </Col>
-</Row>
-<!-- {/if} -->
+<Col>
+  <div>
+    {#if errorMessage != ""}
+      <Alert color="danger" dismissible>{errorMessage}</Alert>
+    {/if}
+
+    {#if sucessMessage != ""}
+      <Alert color="success">{sucessMessage}</Alert>
+    {/if}
+
+    {#if user == null}
+      <Button
+        id="submitButton"
+        outline
+        color="success"
+        class="float-right"
+        on:click={loginWithEmail}
+        size="block">Submit</Button
+      >
+    {/if}
+  </div>
+</Col>
 
 <!-- if is always coming up as false -->

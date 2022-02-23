@@ -6,7 +6,17 @@
   import { goto } from "@sapper/app";
   import Box from "../components/box.svelte";
 
+  // TODO: get isStudent from firebase
+
   onMount(async () => {
+    var user = firebase.auth().currentUser;
+    console.log(user, "Current User", $authStore, "Authsore");
+    // if (user) {
+    //   // User is signed in.
+    // } else {
+    //   // No user is signed in.
+    // }
+
     console.log($authStore.isStudent);
     if (!$authStore.isStudent) {
       alert("You are not a student");
