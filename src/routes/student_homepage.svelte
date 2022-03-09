@@ -8,21 +8,21 @@
 
   // TODO: get isStudent from firebase
 
+  authStore.subscribe(async (info) => {
+    console.log(info);
+  });
+
   onMount(async () => {
     var user = firebase.auth().currentUser;
+
     console.log(user, "Current User", $authStore, "Authsore");
-    // if (user) {
-    //   // User is signed in.
-    // } else {
-    //   // No user is signed in.
-    // }
 
     console.log($authStore.isStudent);
     if (!$authStore.isStudent) {
       alert("You are not a student");
-      await goto("/");
+      // await goto("/");
     }
-    getTecherListFromStudent($authStore.studentPath);
+    // getTecherListFromStudent($authStore.studentPath);
   });
 </script>
 

@@ -58,6 +58,6 @@ export async function getOrgCode(orgName) {
 export async function getTecherListFromStudent(studentPath){
   let returnData;
   let db = firebase.firestore();
-  returnData = await db.doc(studentPath).coderBucksObject.map()
+  returnData = await db.doc(studentPath).coderBucksObject
   console.log(returnData);
 }

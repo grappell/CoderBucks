@@ -10,7 +10,14 @@
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         var uid = user.uid;
-        authStore.set({ userId: uid, fierbaseOn: true, isLogedIn: true });
+        authStore.update((previous) => {
+          previous = {
+            ...previous,
+            userId: uid,
+            fierbaseOn: true,
+            isLogedIn: true,
+          };
+        });
       } else {
         authStore.set({
           userId: undefined,

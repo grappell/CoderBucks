@@ -1,6 +1,7 @@
 <script>
   import Acc from "../components/acc.svelte";
   import { goto } from "@sapper/app";
+  import authStore from "../store/authStore";
 
   var errorMessage = "";
   var sucessMessage = "";
@@ -18,9 +19,12 @@
         .where("userId", "==", user.user.uid)
         .get()
         .then((data) => {
-          console.log("found you", data.docs[0].data().userId);
-          if (data.coderBucksObject) {
+          console.log("found your account :)", data.docs[0].data().userId);
+          if (data.docs[0].data().coderBucksObject) {
             console.log("isStudent");
+            let buffer = { ...$authStore };
+            buffer.isStudent = true;
+            authStore.set(buffer);
           } else {
             console.log("is not student");
           }
