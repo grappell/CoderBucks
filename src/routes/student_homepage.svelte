@@ -1,26 +1,28 @@
 <script>
-  import { getTeachers, getTecherListFromStudent } from "../db";
+  import {
+    getTeachers,
+    getTecherListFromStudent,
+    getCoderBucksObject,
+  } from "../db";
   import authStore from "../store/authStore";
   import { onMount } from "svelte";
   import { Button } from "sveltestrap/src";
   import { goto } from "@sapper/app";
   import Box from "../components/box.svelte";
 
-  // TODO: get isStudent from firebase
-
-  authStore.subscribe(async (info) => {
-    console.log(info);
-  });
-
+  // TODO: get isStudent from firebase (also not working)
   onMount(async () => {
-    var user = firebase.auth().currentUser;
+    let db = firebase.firestore();
 
-    console.log(user, "Current User", $authStore, "Authsore");
+    var cbObj = await getCoderBucksObject($authStore.studentPath);
 
     console.log($authStore.isStudent);
-    if (!$authStore.isStudent) {
+
+    console.log(cbObj);
+
+    if (!$authStore.isStudent && !cbObj) {
       alert("You are not a student");
-      // await goto("/");
+      await goto("/");
     }
     // getTecherListFromStudent($authStore.studentPath);
   });

@@ -99,8 +99,10 @@
               });
           });
         //end of .then
+        prefetch("./student_homepage").then(async () => {
+          await goto("/student_homepage");
+        });
       }
-      await goto("/student_homepage");
       errorMessage = "";
       sucessMessage = "Success! Redirecting...";
     } catch (error) {

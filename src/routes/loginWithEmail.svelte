@@ -1,6 +1,6 @@
 <script>
   import Acc from "../components/acc.svelte";
-  import { goto } from "@sapper/app";
+  import { goto, prefetch } from "@sapper/app";
   import authStore from "../store/authStore";
 
   var errorMessage = "";
@@ -24,7 +24,11 @@
             console.log("isStudent");
             let buffer = { ...$authStore };
             buffer.isStudent = true;
+            buffer.studentPath = data.docs[0].ref.path; // to populate
             authStore.set(buffer);
+            prefetch("./student_homepage").then(async () => {
+              await goto("/student_homepage");
+            });
           } else {
             console.log("is not student");
           }

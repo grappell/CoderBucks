@@ -54,10 +54,28 @@ export async function getOrgCode(orgName) {
   return returnData;
 }
 
-
+// unfinished
 export async function getTecherListFromStudent(studentPath){
   let returnData;
   let db = firebase.firestore();
   returnData = await db.doc(studentPath).coderBucksObject
   console.log(returnData);
+}
+
+
+export async function getCoderBucksObject(studentPath) {
+  let returData;
+  let db = firebase.firestore();
+  try{
+    await db
+      .doc(studentPath)
+      .get()
+      .then((data) => {
+        returData = data.data().coderBucksObject;
+      });
+    return returData;
+  } catch (e) {
+    console.error(e) // common error --> student path is undefined (look at the authStore value when you call it)
+    return null;
+  }
 }
