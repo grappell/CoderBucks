@@ -75,7 +75,7 @@ export async function getCoderBucksObject(studentPath) {
       });
     return returData;
   } catch (e) {
-    console.error(e) // common error --> student path is undefined (look at the authStore value when you call it)
+    console.error(e) // common error --> student path is undefined (look at the authStore value when you call it) 
     return null;
   }
 }

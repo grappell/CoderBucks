@@ -2,6 +2,7 @@
   import Acc from "../components/acc.svelte";
   import { goto, prefetch } from "@sapper/app";
   import authStore from "../store/authStore";
+  import { storageAvailable } from "../helper";
 
   var errorMessage = "";
   var sucessMessage = "";
@@ -12,7 +13,6 @@
       var user = await firebase
         .auth()
         .signInWithEmailAndPassword(email, password);
-      console.log(user.user.uid);
       var db = firebase.firestore();
       await db
         .collection(`/organization/EB/students`)
@@ -20,12 +20,47 @@
         .get()
         .then((data) => {
           console.log("found your account :)", data.docs[0].data().userId);
+
+          let fakeAuthStore = {
+            userId: undefined,
+            fierbaseOn: false,
+            isLogedIn: false,
+            isStudent: false,
+            studentPath: undefined,
+          };
+
+          fakeAuthStore = {
+            ...fakeAuthStore,
+            userId: data.docs[0].data().userId,
+            fierbaseOn: true,
+            isLogedIn: true,
+          };
+          // session storage for authStore
+          if (storageAvailable("sessionStorage")) {
+            let jsoned = JSON.stringify(fakeAuthStore);
+            sessionStorage.setItem("authStore", jsoned);
+          } else {
+            alert("No session sorage avalable");
+          }
+
           if (data.docs[0].data().coderBucksObject) {
+            // check if student
             console.log("isStudent");
             let buffer = { ...$authStore };
             buffer.isStudent = true;
             buffer.studentPath = data.docs[0].ref.path; // to populate
             authStore.set(buffer);
+
+            if (storageAvailable("sessionStorage")) {
+              fakeAuthStore = {
+                ...fakeAuthStore,
+                isStudent: true,
+                studentPath: data.docs[0].ref.path,
+              };
+              let jsoned = JSON.stringify(fakeAuthStore);
+              sessionStorage.setItem("authStore", jsoned);
+            }
+
             prefetch("./student_homepage").then(async () => {
               await goto("/student_homepage");
             });

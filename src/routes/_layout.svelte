@@ -9,9 +9,9 @@
   onMount(() => {
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
-        var uid = user.uid;
+        const uid = user.uid;
         authStore.update((previous) => {
-          previous = {
+          return {
             ...previous,
             userId: uid,
             fierbaseOn: true,
@@ -28,6 +28,13 @@
         });
       }
     });
+
+    if ($authStore.uid == undefined) {
+      let sessionStorageIn = sessionStorage.getItem("authStore");
+      if (sessionStorageIn) {
+        authStore.set(JSON.parse(sessionStorageIn));
+      }
+    }
   });
 </script>
 
