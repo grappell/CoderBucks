@@ -50,7 +50,6 @@
             buffer.isStudent = true;
             buffer.studentPath = data.docs[0].ref.path; // to populate
             authStore.set(buffer);
-
             if (storageAvailable("sessionStorage")) {
               fakeAuthStore = {
                 ...fakeAuthStore,

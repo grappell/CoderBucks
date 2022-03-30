@@ -30,55 +30,112 @@
 
 <!-- AuthStore is not working :( -->
 
-<div class="container">
-  <div class="row">
-    <div class="col">Column</div>
-    <div class="col">Column</div>
-    <div class="col">Column</div>
-  </div>
+<!-- things we want:
+  
+ -> Total coder bucks (in big)
+ -> teacher spend store (links maby)
+ -> Accoount controller
+ -> Open assignments tab (stuff that the teacher is offering to pay for in coderbucks)
+
+-->
+
+<h1>Student Homepage</h1>
+
+<div class="photo-container">
+  <section class="photo-grid">
+    <div class="card card-cb">Total coder bucks</div>
+    <div
+      class="card card-tall card-wide"
+      style="background-image: url('https://media.wired.com/photos/5c9040ee4950d24718d6da99/1:1/w_1800,h_1800,c_limit/shoppingcart-1066110386.jpg');"
+    >
+      Teacher Store
+    </div>
+    <!-- <div
+      class="card card-tall"
+      style="background-image: url('http://cdn.onlinewebfonts.com/svg/img_243887.png');"
+    >
+      Account
+    </div> -->
+    <div
+      class="card card-tall card-wide"
+      style="background-image: url('https://media.wired.com/photos/5ae0d5ae3f3b183561144216/16:9/w_2005,h_1128,c_limit/google-tasks.jpg'); color: black;"
+    >
+      Open tasks
+    </div>
+    <!-- <div
+      class="card card-tall"
+      style="background-image: url('https://echamicrobiology.com/app/uploads/2016/05/question-mark-character.jpg'); color: black;"
+    >
+      Someting else
+    </div> -->
+    <!-- <div class="card card-tall">2</div> -->
+  </section>
 </div>
 
-<div class="row">
-  <Box
-    dimensions={{ x: 100, y: 10, roundnes: 10 }}
-    color={{ r: 59, g: 59, b: 59 }}
-    content={{
-      header: "Coder Bucks Value",
-      subtext: "yada yada here is your coderbucks",
-    }}
-    image={{
-      src: "https://post.medicalnewstoday.com/wp-content/uploads/sites/3/2020/02/322868_1100-800x825.jpg",
-      alt: "Cute dog (for testing)",
-      size: 100,
-    }}
-  />
-  <Box
-    dimensions={{ x: 100, y: 10, roundnes: 10 }}
-    color={{ r: 59, g: 59, b: 59 }}
-    content={{ header: "Example B", subtext: "dkfsdkllj" }}
-    image={{
-      src: "https://i.guim.co.uk/img/media/fe1e34da640c5c56ed16f76ce6f994fa9343d09d/0_174_3408_2046/master/3408.jpg?width=1200&height=1200&quality=85&auto=format&fit=crop&s=67773a9d419786091c958b2ad08eae5e",
-      alt: "Cute dog (for testing)",
-      size: 100,
-    }}
-  />
-</div>
-<div class="row">
-  <Box
-    dimensions={{ x: 100, y: 100, roundnes: 10 }}
-    color={{ r: 59, g: 59, b: 59 }}
-    content={{ header: "Teachers:", subtext: "ereffsdfdsfdf" }}
-    image={{
-      src: "https://i.guim.co.uk/img/media/fe1e34da640c5c56ed16f76ce6f994fa9343d09d/0_174_3408_2046/master/3408.jpg?width=1200&height=1200&quality=85&auto=format&fit=crop&s=67773a9d419786091c958b2ad08eae5e",
-      alt: "Cute dog (for testing)",
-      size: 100,
-    }}
-  />
-</div>
-
-<!-- Want to have: everything at a glance -->
 <style>
-  .container {
-    padding: 20px;
+  .photo-container {
+    position: absolute;
+    left: 0;
+    margin: 0;
+    padding: 0;
+  }
+
+  .card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: #353535;
+    font-size: 3rem;
+    color: #fff;
+    box-shadow: rgba(3, 8, 20, 0.1) 0px 0.15rem 0.5rem,
+      rgba(2, 8, 20, 0.1) 0px 0.075rem 0.175rem;
+    height: 100%;
+    width: 100%;
+    border-radius: 4px;
+    transition: all 500ms;
+    overflow: hidden;
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  .card:hover {
+    box-shadow: rgba(2, 8, 20, 0.1) 0px 0.35em 1.175em,
+      rgba(2, 8, 20, 0.08) 0px 0.175em 0.5em;
+    transform: translateY(-3px) scale(1.01);
+  }
+
+  .photo-grid {
+    margin: 0;
+    display: grid;
+    gap: 1rem;
+    transform: translateX(12.5%);
+    grid-template-columns: repeat(auto, minmax(240px, 1fr));
+    grid-auto-rows: 140px;
+    grid-auto-columns: 80vw;
+  }
+
+  /* Medium screens */
+  @media screen and (min-width: 600px) {
+    .card-tall {
+      grid-row: span 2 / auto;
+    }
+
+    .card-wide {
+      grid-column: span 2 / auto;
+    }
+
+    .photo-grid {
+      grid-auto-columns: 19vw;
+    }
+
+    .card-cb {
+      grid-column: span 4 / auto;
+      grid-row: span 3 / auto;
+      background-image: url("https://www.investopedia.com/thmb/lqOcGlE7PI6vLMzhn5EDdO0HvYk=/1337x1003/smart/filters:no_upscale()/GettyImages-1054017850-7ef42af7b8044d7a86cfb2bff8641e1d.jpg");
+      color: black;
+    }
   }
 </style>
