@@ -10,12 +10,24 @@
     var email = event.detail.email;
     var password = event.detail.password;
     try {
-      var user = await firebase
+      let user;
+
+      await firebase
         .auth()
-        .signInWithEmailAndPassword(email, password);
+        .setPersistence(firebase.auth.Auth.Persistence.SESSION)
+        .then(async () => {
+          user = await firebase
+            .auth()
+            .signInWithEmailAndPassword(email, password);
+        });
+
+      console.log(user);
+
       var db = firebase.firestore();
       await db
-        .collection(`/organization/EB/students`)
+        .collection(`/organization/EB/students`) // TODO: There should be no "EB" in the collection here.
+        // We were trying to add students to a teacher in the helper function
+        // Seeing if we could avoid using a for loop to loop theough all of the orgs and doing a .where in each
         .where("userId", "==", user.user.uid)
         .get()
         .then((data) => {
@@ -72,7 +84,7 @@
       sucessMessage = "Logged In!";
       await goto("/");
     } catch (error) {
-      console.log(error);
+      console.error(error);
       errorMessage = "Invalid Email or Password";
       sucessMessage = "";
     }

@@ -73,7 +73,8 @@
   http://localhost:3000/organization/[name]/teachers/[teacherName]<br />
   http://localhost:3000/organization/[name]/teachers/[teacherName]/addProduct<br
   />
-  http://localhost:3000/organization/add
+  http://localhost:3000/organization/add <br />
+  http://localhost:3000/student_homepage
 </p>
 
 <style>
