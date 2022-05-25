@@ -1,9 +1,19 @@
-export async function getOrginisations() {
+export async function getOrginisations(shouldReturnNames = false) {
   var db = firebase.firestore();
   var collection = await db.collection("organization").get();
-  return collection.docs.map((data) => {
-    return data.data();
-  });
+  if (shouldReturnNames){
+
+    return collection.docs.map((data) => {
+      return data.data().name;
+    });
+
+  } else {
+
+    return collection.docs.map((data) => {
+      return data.data()
+    });
+
+  }
 }
 
 export async function getTeachers(orgName) {
@@ -80,7 +90,18 @@ export async function getCoderBucksObject(studentPath) {
   }
 }
 
+//doing: adding the student ref to the teacher
+//todo: add the CB OBJ to the student
+export async function addStudentToTeacher(teacherEmail = "", studentPath) {
+  let db = firebase.firestore();
+  const arrayUnion = firebase.firestore.FieldValue.arrayUnion;
 
-// export async function addStudentToTeacher(teacherCode) {
+  let orgPath = studentPath.split("/").slice(0, 2).join("/")
 
-// }
+  // we add the ref to the teacher
+  await db.collection(`${orgPath}/teachers`).where("email", "==", teacherEmail).get().then((data) => {
+    let targetTeacher = data.docs[0].ref;
+    let studentRef = db.doc(studentPath);
+    targetTeacher.update({ studentsRef: arrayUnion(studentRef) });
+  });
+}

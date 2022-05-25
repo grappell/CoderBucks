@@ -3,6 +3,7 @@
   import { goto, prefetch } from "@sapper/app";
   import authStore from "../store/authStore";
   import { storageAvailable } from "../helper";
+  import { getOrginisations } from "../db";
 
   var errorMessage = "";
   var sucessMessage = "";
@@ -24,65 +25,72 @@
       console.log(user);
 
       var db = firebase.firestore();
-      await db
-        .collection(`/organization/EB/students`) // TODO: There should be no "EB" in the collection here.
-        // We were trying to add students to a teacher in the helper function
-        // Seeing if we could avoid using a for loop to loop theough all of the orgs and doing a .where in each
-        .where("userId", "==", user.user.uid)
-        .get()
-        .then((data) => {
-          console.log("found your account :)", data.docs[0].data().userId);
+      let allOrgNames = await getOrginisations(true);
 
-          let fakeAuthStore = {
-            userId: undefined,
-            fierbaseOn: false,
-            isLogedIn: false,
-            isStudent: false,
-            studentPath: undefined,
-          };
+      allOrgNames.forEach(async (name) => {
+        try {
+          await db
+            .collection(`/organization/${name}/students`)
+            .where("userId", "==", user.user.uid)
+            .get()
+            .then((data) => {
+              console.log("found your account :)", data.docs[0].data().userId);
 
-          fakeAuthStore = {
-            ...fakeAuthStore,
-            userId: data.docs[0].data().userId,
-            fierbaseOn: true,
-            isLogedIn: true,
-          };
-          // session storage for authStore
-          if (storageAvailable("sessionStorage")) {
-            let jsoned = JSON.stringify(fakeAuthStore);
-            sessionStorage.setItem("authStore", jsoned);
-          } else {
-            alert("No session sorage avalable");
-          }
+              let fakeAuthStore = {
+                userId: undefined,
+                fierbaseOn: false,
+                isLogedIn: false,
+                isStudent: false,
+                studentPath: undefined,
+              };
 
-          if (data.docs[0].data().coderBucksObject) {
-            // check if student
-            console.log("isStudent");
-            let buffer = { ...$authStore };
-            buffer.isStudent = true;
-            buffer.studentPath = data.docs[0].ref.path; // to populate
-            authStore.set(buffer);
-            if (storageAvailable("sessionStorage")) {
               fakeAuthStore = {
                 ...fakeAuthStore,
-                isStudent: true,
-                studentPath: data.docs[0].ref.path,
+                userId: data.docs[0].data().userId,
+                fierbaseOn: true,
+                isLogedIn: true,
               };
-              let jsoned = JSON.stringify(fakeAuthStore);
-              sessionStorage.setItem("authStore", jsoned);
-            }
+              // session storage for authStore
+              if (storageAvailable("sessionStorage")) {
+                let jsoned = JSON.stringify(fakeAuthStore);
+                sessionStorage.setItem("authStore", jsoned);
+              } else {
+                alert("No session sorage avalable");
+              }
 
-            prefetch("./student_homepage").then(async () => {
-              await goto("/student_homepage");
+              if (data.docs[0].data().coderBucksObject) {
+                // check if student
+                console.log("isStudent");
+                let buffer = { ...$authStore };
+                buffer.isStudent = true;
+                buffer.studentPath = data.docs[0].ref.path; // to populate
+                authStore.set(buffer);
+                if (storageAvailable("sessionStorage")) {
+                  fakeAuthStore = {
+                    ...fakeAuthStore,
+                    isStudent: true,
+                    studentPath: data.docs[0].ref.path,
+                  };
+                  let jsoned = JSON.stringify(fakeAuthStore);
+                  sessionStorage.setItem("authStore", jsoned);
+                }
+
+                prefetch("./student_homepage").then(async () => {
+                  await goto("/student_homepage");
+                });
+              } else {
+                console.log("is not student");
+              }
             });
-          } else {
-            console.log("is not student");
-          }
-        });
 
-      errorMessage = "";
-      sucessMessage = "Logged In!";
-      await goto("/");
+          errorMessage = "";
+          sucessMessage = "Logged In!";
+          await goto("/");
+        } catch {
+          // the only error we should recieving is the one saying that "data is undefined".
+          //However if there is a ghost error, consider adding a console.error here :)
+        }
+      });
     } catch (error) {
       console.error(error);
       errorMessage = "Invalid Email or Password";

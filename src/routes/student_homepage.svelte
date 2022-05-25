@@ -1,9 +1,5 @@
 <script>
-  import {
-    getTeachers,
-    getTecherListFromStudent,
-    getCoderBucksObject,
-  } from "../db";
+  import { getCoderBucksObject, addStudentToTeacher } from "../db";
   import authStore from "../store/authStore";
   import { onMount } from "svelte";
   import { Button } from "sveltestrap/src";
@@ -48,8 +44,8 @@
   });
 
   function onNameSubmit() {
-    console.log("Submitted text: " + classNameInput);
-  } // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Was working here (currentally placeholder)
+    addStudentToTeacher(classNameInput, $authStore.studentPath);
+  }
 </script>
 
 <!-- things we want:
@@ -95,7 +91,7 @@
       <FormGroup class="classnameInput">
         <Label for="className">Class Name</Label>
         <Input
-          type="text"
+          type="email"
           name="className"
           id="className"
           bind:value={classNameInput}
