@@ -10,6 +10,7 @@
   let total = 0;
   let mail_to_value = [];
   let classNameInput = "";
+  let buttonColor = "secondary";
 
   // TODO: get isStudent from firebase (also not working)
   onMount(async () => {
@@ -43,8 +44,17 @@
     console.log(mail_to_value, total);
   });
 
-  function onNameSubmit() {
-    addStudentToTeacher(classNameInput, $authStore.studentPath);
+  async function onNameSubmit() {
+    let suceeded = await addStudentToTeacher(
+      classNameInput,
+      $authStore.studentPath
+    );
+
+    if (suceeded) {
+      buttonColor = "success";
+    } else {
+      buttonColor = "danger";
+    }
   }
 </script>
 
@@ -96,9 +106,13 @@
           id="className"
           bind:value={classNameInput}
         />
-        <Button class="classnameInput" on:click={onNameSubmit}
-          >Here is my button</Button
+        <Button
+          class="classnameInput"
+          on:click={onNameSubmit}
+          color={buttonColor}
         >
+          Here is my button
+        </Button>
       </FormGroup>
     </div>
   </section>
@@ -164,7 +178,7 @@
   .classNameIn_Div :global(.classnameInput) {
     color: rgb(238, 238, 238);
     text-align: center;
-    margin: auto auto;
+    margin: 3px auto;
     width: 50rem;
     font-weight: 600;
   }
