@@ -90,18 +90,48 @@ export async function getCoderBucksObject(studentPath) {
   }
 }
 
-//doing: adding the student ref to the teacher
-//todo: add the CB OBJ to the student
+
 export async function addStudentToTeacher(teacherEmail = "", studentPath) {
   let db = firebase.firestore();
-  const arrayUnion = firebase.firestore.FieldValue.arrayUnion;
 
-  let orgPath = studentPath.split("/").slice(0, 2).join("/")
+  if(!teacherEmail){
+    console.error("No teacher email specified, aborting function")
+    return false;
+  } 
+  
+  let cbObj = await db.doc(studentPath).get().then((data) => {return data.data().coderBucksObject})
+  if (cbObj[teacherEmail]){
+    console.error("Teacher is already added")
+    return false;
+  }
 
-  // we add the ref to the teacher
-  await db.collection(`${orgPath}/teachers`).where("email", "==", teacherEmail).get().then((data) => {
-    let targetTeacher = data.docs[0].ref;
-    let studentRef = db.doc(studentPath);
-    targetTeacher.update({ studentsRef: arrayUnion(studentRef) });
-  });
+  try {
+
+    const arrayUnion = firebase.firestore.FieldValue.arrayUnion;
+
+    let orgPath = studentPath.split("/").slice(0, 2).join("/")
+
+    // we add the ref to the teacher
+    await db.collection(`${orgPath}/teachers`).where("email", "==", teacherEmail).get().then((data) => {
+      let targetTeacher = data.docs[0].ref;
+      let studentRef = db.doc(studentPath);
+      targetTeacher.update({ studentsRef: arrayUnion(studentRef) });
+    });
+
+    //add cbobj to student
+    await db.doc(studentPath).set(
+      {coderBucksObject: {
+        [teacherEmail]: {
+          coderBucksValue: 0,
+          path: studentPath,
+        },
+      },
+    }, {merge: true})
+
+    return true;
+    
+  } catch (e) {
+    console.error(e)
+    return false;
+  }
 }
