@@ -6,6 +6,7 @@
   import { goto } from "@sapper/app";
   import Box from "../components/box.svelte";
   import { Row, Alert, FormGroup, Input, Label, Col } from "sveltestrap/src";
+  import Popup from "../components/popup.svelte";
 
   let total = 0;
   let mail_to_value = [];
@@ -50,6 +51,8 @@
       $authStore.studentPath
     );
 
+    // todo: clear input opon sucess + others.
+
     if (suceeded) {
       buttonColor = "success";
     } else {
@@ -65,6 +68,9 @@
  -> Open assignments tab (stuff that the teacher is offering to pay for in coderbucks)
 
 -->
+
+<Popup />
+
 <h1 style="text-align: center;">Student Homepage</h1>
 <div class="photo-container">
   <section class="photo-grid">

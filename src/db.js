@@ -28,6 +28,20 @@ export async function getTeachers(orgName) {
   });
 }
 
+export async function getTeacherEmails(orgName) {
+  var db = firebase.firestore();
+  var collection = await db
+    .collection("organization")
+    .doc(orgName)
+    .collection("teachers")
+    .get();
+  return collection.docs.map((data) => {
+    let teacher = { ...data.data(), id: data.id };
+    return teacher.email
+  });
+}
+
+
 // function obsolite
 export async function getTeacherSubCollections(
   orgName,
@@ -74,16 +88,16 @@ export async function getTecherListFromStudent(studentPath){
 
 
 export async function getCoderBucksObject(studentPath) {
-  let returData;
+  let returnData;
   let db = firebase.firestore();
   try{
     await db
       .doc(studentPath)
       .get()
       .then((data) => {
-        returData = data.data().coderBucksObject;
+        returnData = data.data().coderBucksObject;
       });
-    return returData;
+    return returnData;
   } catch (e) {
     console.error(e) // common error --> student path is undefined (look at the authStore value when you call it) 
     return null;
@@ -94,16 +108,27 @@ export async function getCoderBucksObject(studentPath) {
 export async function addStudentToTeacher(teacherEmail = "", studentPath) {
   let db = firebase.firestore();
 
+  //checks for corner cases
   if(!teacherEmail){
-    console.error("No teacher email specified, aborting function")
+    console.error(new Error("No teacher email specified, aborting function"))
     return false;
   } 
   
-  let cbObj = await db.doc(studentPath).get().then((data) => {return data.data().coderBucksObject})
+  let cbObj = await getCoderBucksObject(studentPath)
   if (cbObj[teacherEmail]){
-    console.error("Teacher is already added")
+    console.error(new Error("Teacher is already added"))
     return false;
   }
+
+  let orgName = studentPath.split("/").slice(1, 2)[0];
+  let teacherEmails = await getTeacherEmails(orgName);
+  if (!teacherEmails.includes(teacherEmail)) {
+    console.error(new Error("Teacher email is invalid - teacher might not exist"));
+    return false;
+  }
+
+  //todo: Make it so that if the teacher already has an ref to the sudent, show a popup saying that "student is alrady added"
+  //PS: there is no need to change logic, as it uses a merege and will not add annother sudent ref. 
 
   try {
 
