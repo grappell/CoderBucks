@@ -13,6 +13,10 @@
   let classNameInput = "";
   let buttonColor = "secondary";
 
+  let showPopup = false;
+  let popTitle = "";
+  let popSubT = "";
+
   // TODO: get isStudent from firebase (also not working)
   onMount(async () => {
     let SSdata = JSON.parse(sessionStorage.getItem("authStore"));
@@ -55,6 +59,9 @@
 
     if (suceeded) {
       buttonColor = "success";
+      showPopup = true;
+      popTitle = "Sucess!";
+      popSubT = "Class Sucessfully Added";
     } else {
       buttonColor = "danger";
     }
@@ -69,9 +76,9 @@
 
 -->
 
-<Popup />
+<Popup input={{ showPopup, title: popTitle, subTitle: popSubT }} />
 
-<h1 style="text-align: center;">Student Homepage</h1>
+<h1 style="text-align: center; padding: 0.5rem">Student Homepage</h1>
 <div class="photo-container">
   <section class="photo-grid">
     <div
