@@ -1,36 +1,52 @@
 <script>
+  import { afterUpdate, beforeUpdate } from "svelte";
   import { Button, Form, FormGroup, Label, Input } from "sveltestrap/src";
-  // export let showPopup = false;
-  // export let label = "";
-  // export let hasInput = false;
-  // export let inputPlaceholder = "Type Here";
 
   export let input = {
-    showPopup: false,
+    showPopup: true,
     title: "",
     subTitle: "",
     label: "",
     hasInput: false,
     inputPlaceholder: "Type Here",
     hasOkButton: false,
+    isGood,
   };
-
-  function handleScroll() {
-    let totalHeight = window.screen.height;
-    document.documentElement.style.setProperty(
-      "--totalHeight",
-      totalHeight + "px"
-    );
-  }
 
   function closePopup() {
     input.showPopup = false;
   }
 
+  beforeUpdate(() => {
+    input.showPopup = true;
+  });
+
+  afterUpdate(() => {
+    let totalHeight = window.screen.height;
+    document.documentElement.style.setProperty(
+      "--totalHeight",
+      totalHeight + "px"
+    );
+
+    switch (input.isGood) {
+      case true:
+        document.getElementById("box").style.backgroundColor = getComputedStyle(
+          document.documentElement
+        ).getPropertyValue("--suceedCol");
+        break;
+
+      case false:
+        document.getElementById("box").style.backgroundColor = getComputedStyle(
+          document.documentElement
+        ).getPropertyValue("--failCol");
+        break;
+
+      default:
+        document.getElementById("box").style.backgroundColor = "white";
+    }
+  });
   export let inputReturn;
 </script>
-
-<svelte:window on:scroll|once={handleScroll} />
 
 {#if input.showPopup}
   <div class="overlay" id="overlay">
@@ -64,6 +80,8 @@
 <style>
   :root {
     --totalHeight: 100vh;
+    --suceedCol: rgb(220, 243, 211);
+    --failCol: rgb(255, 218, 218);
   }
 
   .box {

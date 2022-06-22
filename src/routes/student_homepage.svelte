@@ -16,6 +16,7 @@
   let showPopup = false;
   let popTitle = "";
   let popSubT = "";
+  let isGood;
 
   // TODO: get isStudent from firebase (also not working)
   onMount(async () => {
@@ -59,11 +60,16 @@
 
     if (suceeded) {
       buttonColor = "success";
-      showPopup = true;
       popTitle = "Sucess!";
       popSubT = "Class Sucessfully Added";
+      isGood = true;
+      showPopup = true;
     } else {
       buttonColor = "danger";
+      popTitle = "Problem Adding Class";
+      popSubT = "Class could not be added for the following reason: [to do]";
+      isGood = false;
+      showPopup = true;
     }
   }
 </script>
@@ -76,7 +82,24 @@
 
 -->
 
-<Popup input={{ showPopup, title: popTitle, subTitle: popSubT }} />
+{#if showPopup}
+  <Popup
+    input={{
+      showPopup: showPopup,
+      title: popTitle,
+      subTitle: popSubT,
+      isGood: isGood,
+    }}
+  />
+{/if}
+<!-- <Popup
+  input={{
+    showPopup: true,
+    title: "here is a test title",
+    subTitle: "Here is a test subtitle",
+    isGood: false,
+  }}
+/> -->
 
 <h1 style="text-align: center; padding: 0.5rem">Student Homepage</h1>
 <div class="photo-container">
