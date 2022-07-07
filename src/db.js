@@ -105,26 +105,26 @@ export async function getCoderBucksObject(studentPath) {
 }
 
 
-export async function addStudentToTeacher(teacherEmail = "", studentPath) {
+export async function addStudentToTeacher(teacherEmail = "", studentPath, error_passthrough) {
   let db = firebase.firestore();
 
   //checks for corner cases
   if(!teacherEmail){
     console.error(new Error("No teacher email specified, aborting function"))
-    return false;
+    return [false, "No teacher email specified"];
   } 
   
   let cbObj = await getCoderBucksObject(studentPath)
   if (cbObj[teacherEmail]){
     console.error(new Error("Teacher is already added"))
-    return false;
+    return [false, "Teacher is already added"];
   }
 
   let orgName = studentPath.split("/").slice(1, 2)[0];
   let teacherEmails = await getTeacherEmails(orgName);
   if (!teacherEmails.includes(teacherEmail)) {
     console.error(new Error("Teacher email is invalid - teacher might not exist"));
-    return false;
+    return [false, "Teacher email is invalid"];
   }
 
   //todo: Make it so that if the teacher already has an ref to the sudent, show a popup saying that "student is alrady added"
@@ -153,10 +153,10 @@ export async function addStudentToTeacher(teacherEmail = "", studentPath) {
       },
     }, {merge: true})
 
-    return true;
+    return [true, ""];
     
   } catch (e) {
     console.error(e)
-    return false;
+    return [false, e];
   }
 }

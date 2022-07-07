@@ -51,6 +51,8 @@
   });
 
   async function onNameSubmit() {
+    let popup = null;
+
     let suceeded = await addStudentToTeacher(
       classNameInput,
       $authStore.studentPath
@@ -58,7 +60,7 @@
 
     // todo: clear input opon sucess + others.
 
-    if (suceeded) {
+    if (suceeded[0]) {
       buttonColor = "success";
       popTitle = "Sucess!";
       popSubT = "Class Sucessfully Added";
@@ -66,11 +68,28 @@
       showPopup = true;
     } else {
       buttonColor = "danger";
-      popTitle = "Problem Adding Class";
-      popSubT = "Class could not be added for the following reason: [to do]";
+      popTitle = "Problem Adding to Class";
+      popSubT =
+        "Class could not be added for the following reason: " +
+        suceeded[1] +
+        ".";
       isGood = false;
       showPopup = true;
     }
+
+    popup = new Popup({
+      target: document.body,
+    });
+
+    popup.input = {
+      showPopup: showPopup,
+      title: popTitle,
+      subTitle: popSubT,
+      isGood: isGood,
+      shouldOpenPopup: showPopup,
+    };
+
+    popup = undefined;
   }
 </script>
 
@@ -81,25 +100,6 @@
  -> Open assignments tab (stuff that the teacher is offering to pay for in coderbucks)
 
 -->
-
-{#if showPopup}
-  <Popup
-    input={{
-      showPopup: showPopup,
-      title: popTitle,
-      subTitle: popSubT,
-      isGood: isGood,
-    }}
-  />
-{/if}
-<!-- <Popup
-  input={{
-    showPopup: true,
-    title: "here is a test title",
-    subTitle: "Here is a test subtitle",
-    isGood: false,
-  }}
-/> -->
 
 <h1 style="text-align: center; padding: 0.5rem">Student Homepage</h1>
 <div class="photo-container">
@@ -118,12 +118,6 @@
     >
       Teacher Store
     </div>
-    <!-- <div
-      class="card card-tall"
-      style="background-image: url('http://cdn.onlinewebfonts.com/svg/img_243887.png');"
-    >
-      Account
-    </div> -->
     <div
       class="card card-tall card-wide"
       style="background-image: url('https://media.wired.com/photos/5ae0d5ae3f3b183561144216/16:9/w_2005,h_1128,c_limit/google-tasks.jpg'); color: black;"
@@ -135,11 +129,12 @@
       style="color: black;"
     >
       <FormGroup class="classnameInput">
-        <Label for="className">Class Name</Label>
+        <Label for="className">Add to other class</Label>
         <Input
           type="email"
           name="className"
           id="className"
+          placeholder="Teacher Email"
           bind:value={classNameInput}
         />
         <Button
@@ -147,7 +142,7 @@
           on:click={onNameSubmit}
           color={buttonColor}
         >
-          Here is my button
+          Submit
         </Button>
       </FormGroup>
     </div>

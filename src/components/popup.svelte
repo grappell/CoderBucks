@@ -1,6 +1,9 @@
+<svelte:options accessors />
+
 <script>
   import { afterUpdate, beforeUpdate } from "svelte";
   import { Button, Form, FormGroup, Label, Input } from "sveltestrap/src";
+  import { fade } from "svelte/transition";
 
   export let input = {
     showPopup: true,
@@ -10,16 +13,12 @@
     hasInput: false,
     inputPlaceholder: "Type Here",
     hasOkButton: false,
-    isGood,
+    isGood: true,
   };
 
-  function closePopup() {
-    input.showPopup = false;
+  function changePopup() {
+    input.showPopup = !input.showPopup;
   }
-
-  beforeUpdate(() => {
-    input.showPopup = true;
-  });
 
   afterUpdate(() => {
     let totalHeight = window.screen.height;
@@ -28,28 +27,36 @@
       totalHeight + "px"
     );
 
-    switch (input.isGood) {
-      case true:
-        document.getElementById("box").style.backgroundColor = getComputedStyle(
-          document.documentElement
-        ).getPropertyValue("--suceedCol");
-        break;
+    if (input.showPopup) {
+      switch (input.isGood) {
+        case true:
+          document.getElementById("box").style.backgroundColor =
+            getComputedStyle(document.documentElement).getPropertyValue(
+              "--suceedCol"
+            );
+          break;
 
-      case false:
-        document.getElementById("box").style.backgroundColor = getComputedStyle(
-          document.documentElement
-        ).getPropertyValue("--failCol");
-        break;
+        case false:
+          document.getElementById("box").style.backgroundColor =
+            getComputedStyle(document.documentElement).getPropertyValue(
+              "--failCol"
+            );
+          break;
 
-      default:
-        document.getElementById("box").style.backgroundColor = "white";
+        default:
+          document.getElementById("box").style.backgroundColor = "white";
+      }
     }
   });
   export let inputReturn;
 </script>
 
 {#if input.showPopup}
-  <div class="overlay" id="overlay">
+  <div
+    class="overlay"
+    id="overlay"
+    transition:fade={{ delay: 150, duration: 300 }}
+  >
     <div class="box" id="box">
       <h1>{input.title}</h1>
       <hr />
@@ -71,7 +78,7 @@
         {#if input.hasOkButton}
           <Button color="primary">Ok</Button>
         {/if}
-        <Button color="dark" on:click={closePopup}>Close</Button>
+        <Button color="dark" on:click={changePopup}>Close</Button>
       </span>
     </div>
   </div>
