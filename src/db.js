@@ -42,11 +42,9 @@ export async function getTeacherEmails(orgName) {
 }
 
 
-// function obsolite
-export async function getTeacherSubCollections(
+export async function getTeacherProducts(
   orgName,
-  teacherName,
-  subCollection
+  teacherName
 ) {
   var db = firebase.firestore();
   var collection = await db
@@ -54,7 +52,7 @@ export async function getTeacherSubCollections(
     .doc(orgName)
     .collection("teachers")
     .doc(teacherName)
-    .collection(subCollection)
+    .collection("products")
     .get();
   return collection.docs.map((data) => {
     return { ...data.data(), id: data.id };
@@ -78,12 +76,13 @@ export async function getOrgCode(orgName) {
   return returnData;
 }
 
-// unfinished
-export async function getTecherListFromStudent(studentPath){
+export async function getTecherEmailsFromStudent(studentPath){
   let returnData;
   let db = firebase.firestore();
-  returnData = await db.doc(studentPath).coderBucksObject
-  console.log(returnData);
+  returnData = await db.doc(studentPath).get().then((data) => {
+    return Object.keys(data.data().coderBucksObject)
+  })
+  return returnData;
 }
 
 
@@ -160,3 +159,8 @@ export async function addStudentToTeacher(teacherEmail = "", studentPath, error_
     return [false, e];
   }
 }
+
+
+// function getTeacherProducts (teacherEmail, orgCode) {
+
+// }

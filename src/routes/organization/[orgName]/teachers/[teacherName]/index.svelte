@@ -1,6 +1,6 @@
 <script>
   import { goto, stores } from "@sapper/app";
-  import { getTeacherSubCollections } from "../../../../../db";
+  import { getTeacherProducts } from "../../../../../db";
   import { onMount } from "svelte";
   import {
     Row,
@@ -51,11 +51,7 @@
     }
     productSuperList = chunk(
       3,
-      await getTeacherSubCollections(
-        $page.params.orgName,
-        $page.params.teacherName,
-        "products"
-      )
+      await getTeacherProducts($page.params.orgName, $page.params.teacherName)
     );
 
     for (let i = 0; i < studentList.length; i++) {

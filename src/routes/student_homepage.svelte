@@ -1,5 +1,9 @@
 <script>
-  import { getCoderBucksObject, addStudentToTeacher } from "../db";
+  import {
+    getCoderBucksObject,
+    addStudentToTeacher,
+    getTecherEmailsFromStudent,
+  } from "../db";
   import authStore from "../store/authStore";
   import { onMount } from "svelte";
   import { Button } from "sveltestrap/src";
@@ -91,6 +95,33 @@
 
     popup = undefined;
   }
+
+  let show = true;
+  function hoverChange() {
+    show = !show;
+
+    let elements = document.getElementsByClassName("card");
+    elements = Array.from(elements);
+    elements.forEach((element) => {
+      if (show) {
+        element.style.display = "flex";
+      } else {
+        element.style.display = "none";
+      }
+    });
+    document.getElementById("teacher-store").style.display = "flex";
+  }
+
+  function getData() {
+    document
+      .getElementById("teacher-store")
+      .addEventListener("mouseover", async (event) => {
+        let teacherEmails = await getTecherEmailsFromStudent(
+          $authStore.studentPath
+        );
+        console.log(teacherEmails);
+      });
+  }
 </script>
 
 <!-- things we want:
@@ -100,6 +131,12 @@
  -> Open assignments tab (stuff that the teacher is offering to pay for in coderbucks)
 
 -->
+
+<!-- Things to fix:
+  When the popup is open on a monitor then the webpage has extra height, allowing scrolling
+-->
+
+<!-- next thing to do is add the teacher store (reminder: we already have a product.svelte file that will lay out the store for us) -->
 
 <h1 style="text-align: center; padding: 0.5rem">Student Homepage</h1>
 <div class="photo-container">
@@ -114,7 +151,11 @@
     </div>
     <div
       class="card card-tall card-wide"
+      id="teacher-store"
       style="background-image: url('https://media.wired.com/photos/5c9040ee4950d24718d6da99/1:1/w_1800,h_1800,c_limit/shoppingcart-1066110386.jpg');"
+      on:pointerover={hoverChange}
+      on:mouseleave={hoverChange}
+      on:load={getData()}
     >
       Teacher Store
     </div>
@@ -125,7 +166,7 @@
       Open tasks
     </div>
     <div
-      class="card-nohover teacher-student-add classNameIn_Div"
+      class="card card-nohover teacher-student-add classNameIn_Div"
       style="color: black;"
     >
       <FormGroup class="classnameInput">
@@ -212,6 +253,16 @@
     margin: 3px auto;
     width: 50rem;
     font-weight: 600;
+  }
+
+  #teacher-store {
+    transition: all 1s;
+  }
+
+  #teacher-store:hover {
+    grid-row: span 6 / auto;
+    grid-column: span 4 / auto;
+    /* grid-row-start: 4; <-- was attempting to aimate this so that the trasition is less jarring */
   }
 
   /* Medium screens */

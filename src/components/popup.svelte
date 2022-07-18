@@ -21,7 +21,8 @@
   }
 
   afterUpdate(() => {
-    let totalHeight = window.screen.height;
+    let totalHeight = window.innerHeight;
+    console.log(totalHeight);
     document.documentElement.style.setProperty(
       "--totalHeight",
       totalHeight + "px"
@@ -86,7 +87,7 @@
 
 <style>
   :root {
-    --totalHeight: 100vh;
+    --totalHeight: 100px;
     --suceedCol: rgb(220, 243, 211);
     --failCol: rgb(255, 218, 218);
   }
@@ -100,7 +101,8 @@
     position: absolute;
     z-index: 1001;
     left: 0;
-    transform: translateX(calc(50vw - 50%)) translateY(calc(50vh - 50%));
+    transform: translateX(calc(50vw - 50%)) translateY(calc(50vh - 60%));
+    top: calc(50vh - 60%);
     padding: 1rem;
     border-radius: 1rem;
     transition: all 1s;
