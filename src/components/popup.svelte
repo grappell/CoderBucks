@@ -22,7 +22,6 @@
 
   afterUpdate(() => {
     let totalHeight = window.innerHeight;
-    console.log(totalHeight);
     document.documentElement.style.setProperty(
       "--totalHeight",
       totalHeight + "px"

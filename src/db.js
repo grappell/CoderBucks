@@ -161,6 +161,17 @@ export async function addStudentToTeacher(teacherEmail = "", studentPath, error_
 }
 
 
-// function getTeacherProducts (teacherEmail, orgCode) {
-
-// }
+export async function getTeacherProductsWithEmail (teacherEmail, orgName) {
+  let db = firebase.firestore();
+  let tName = "";
+  let teacherPath = await db.collection(`organization/${orgName}/teachers/`).where("email", "==", teacherEmail).get().then((data) => {
+    tName = data.docs[0].data().name;
+    return data.docs[0].ref.path
+  })
+  
+  let productsUF = await db.doc(teacherPath).collection("products").get() //uf --> unfiltered
+  
+  return productsUF.docs.map((data) => {
+    return { ...data.data(), id: data.id, teacherName: tName };
+  })
+} 
