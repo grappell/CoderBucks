@@ -1,5 +1,6 @@
 <script>
   export let product;
+  // export let fontColor;
   import {
     Card,
     CardBody,
@@ -12,7 +13,7 @@
 
 <Card class="mb-3">
   <CardHeader>
-    <CardTitle>{product.name}</CardTitle>
+    <CardTitle style="color:black;">{product.name}</CardTitle>
   </CardHeader>
   <CardBody>
     <!-- svelte-ignore a11y-missing-attribute -->
@@ -21,12 +22,20 @@
       style="width: 80%; display: block; margin:auto;"
     />
     <br />
-    <CardText style="text-align: center;"
+    <CardText style="text-align: center; color:black;"
       ><strong>Price: </strong> ${product.price} CB</CardText
     >
-    <CardSubtitle style="text-align: center;"
+    <CardSubtitle style="text-align: center; color:black;"
       ><strong>Description: </strong>
       {product.decription || "Missing Deciption"}</CardSubtitle
     >
   </CardBody>
 </Card>
+
+<style>
+  * {
+    z-index: 20 !important;
+    position: relative;
+    font-size: 2rem !important;
+  }
+</style>
