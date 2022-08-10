@@ -190,6 +190,8 @@
         Teacher Store
       {/if}
       {#if openStore}
+        Store:
+        <!-- was working here -->
         <div style="padding: 10%; font-size: 30px; overflow:scroll;">
           <Row>
             {#each teacherProductSuperlist as productList}

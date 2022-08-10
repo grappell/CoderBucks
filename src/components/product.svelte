@@ -13,7 +13,7 @@
 
 <Card class="mb-3">
   <CardHeader>
-    <CardTitle style="color:black;">{product.name}</CardTitle>
+    <CardTitle style="color:black; text-align:center">{product.name}</CardTitle>
   </CardHeader>
   <CardBody>
     <!-- svelte-ignore a11y-missing-attribute -->
@@ -36,6 +36,6 @@
   * {
     z-index: 20 !important;
     position: relative;
-    font-size: 2rem !important;
+    font-size: 20px !important;
   }
 </style>
