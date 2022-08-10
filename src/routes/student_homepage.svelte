@@ -12,6 +12,7 @@
   import Box from "../components/box.svelte";
   import { Row, Alert, FormGroup, Input, Label, Col } from "sveltestrap/src";
   import Popup from "../components/popup.svelte";
+  import Card from "../components/product.svelte";
 
   let total = 0;
   let mail_to_value = [];
@@ -100,20 +101,28 @@
     popup = undefined;
   }
 
-  let show = true;
-  function hoverChange() {
-    show = !show;
+  let show = false;
+  function hoverChange(inbound) {
+    show = !inbound;
 
-    let elements = document.getElementsByClassName("card");
+    let elements = document.getElementsByClassName("card-c");
+    let card = document.getElementById("teacher-store").style;
+
     elements = Array.from(elements);
     elements.forEach((element) => {
       if (show) {
-        element.style.display = "flex";
+        element.style.opacity = "100";
+        card.position = "relative";
+        card.transform = "scale(-1000px)";
+        card.zIndex = "0";
       } else {
-        element.style.display = "none";
+        card.zIndex = "2";
+        element.style.opacity = "0";
+        card.position = "absolute";
+        card.transform = "scale(100vw)";
       }
     });
-    document.getElementById("teacher-store").style.display = "flex";
+    card.opacity = "100";
   }
 
   onMount(async () => {
@@ -155,13 +164,13 @@
   When the popup is open on a monitor then the webpage has extra height, allowing scrolling
 -->
 
-<!-- next thing to do is add the teacher store (reminder: we already have a product.svelte file that will lay out the store for us) -->
+<!-- next thing to do is add the teacher store (remindzer: we already have a product.svelte file that will lay out the store for us) -->
 
 <h1 style="text-align: center; padding: 0.5rem">Student Homepage</h1>
 <div class="photo-container">
   <section class="photo-grid">
     <div
-      class="card card-cb"
+      class="card-c card-cb"
       style="background-image: url('https://www.investopedia.com/thmb/lqOcGlE7PI6vLMzhn5EDdO0HvYk=/1337x1003/smart/filters:no_upscale()/GettyImages-1054017850-7ef42af7b8044d7a86cfb2bff8641e1d.jpg');"
     >
       <p>
@@ -169,27 +178,38 @@
       </p>
     </div>
     <div
-      class="card card-tall card-wide"
+      class="card-c card-tall card-wide"
       id="teacher-store"
       style="background-image: url('https://media.wired.com/photos/5c9040ee4950d24718d6da99/1:1/w_1800,h_1800,c_limit/shoppingcart-1066110386.jpg');"
-      on:pointerover={hoverChange}
-      on:mouseleave={hoverChange}
+      on:pointerover={() => {
+        hoverChange(true);
+      }}
+      on:mouseleave={() => hoverChange(false)}
     >
       {#if !openStore}
         Teacher Store
       {/if}
       {#if openStore}
-        Store is open
+        <div style="padding: 10%; font-size: 30px; overflow:scroll;">
+          <Row>
+            {#each teacherProductSuperlist as productList}
+              <Col md="4">
+                <Card product={productList} style="color: black;" />
+              </Col>
+            {/each}
+          </Row>
+        </div>
+        <!-- Here is something -->
       {/if}
     </div>
     <div
-      class="card card-tall card-wide"
+      class="card-c card-tall card-wide"
       style="background-image: url('https://media.wired.com/photos/5ae0d5ae3f3b183561144216/16:9/w_2005,h_1128,c_limit/google-tasks.jpg'); color: black;"
     >
       Open tasks
     </div>
     <div
-      class="card card-nohover teacher-student-add classNameIn_Div"
+      class="card-c card-nohover teacher-student-add classNameIn_Div"
       style="color: black;"
     >
       <FormGroup class="classnameInput">
@@ -221,7 +241,7 @@
     padding: 0;
   }
 
-  .card,
+  .card-c,
   .card-nohover {
     display: flex;
     flex-direction: column;
@@ -249,7 +269,7 @@
     color: white;
   }
 
-  .card:hover {
+  .card-c:hover {
     box-shadow: rgba(2, 8, 20, 0.1) 0px 0.35em 1.175em,
       rgba(2, 8, 20, 0.08) 0px 0.175em 0.5em;
     transform: translateY(-3px) scale(1.01);
@@ -262,6 +282,7 @@
     grid-template-columns: repeat(auto, minmax(240px, 1fr));
     grid-template-rows: repeat(auto, minmax(240px, 77%));
     transform: translateX(6vw);
+    /* ^^ this was making the width scale incorretly ar -600px */
     grid-auto-rows: 10px;
     grid-auto-columns: 10vh;
   }
@@ -283,11 +304,11 @@
     transition: all 1s;
   }
 
-  #teacher-store:hover {
+  /* #teacher-store:hover {
     grid-row: span 6 / auto;
-    grid-column: span 4 / auto;
-    /* grid-row-start: 4; <-- was attempting to aimate this so that the trasition is less jarring */
-  }
+    grid-column: span 4 / auto; */
+  /* grid-row-start: 4; <-- was attempting to aimate this so that the trasition is less jarring */
+  /* } */
 
   .card-wide {
     grid-column: span 4 / auto;
