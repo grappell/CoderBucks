@@ -11,7 +11,7 @@
   } from "sveltestrap/src";
 </script>
 
-<Card class="mb-3">
+<Card class="mb-3" style="width: min(100%, 300px); height: min(110%, 500px);">
   <CardHeader>
     <CardTitle style="color:black; text-align:center">{product.name}</CardTitle>
   </CardHeader>
@@ -37,5 +37,9 @@
     z-index: 20 !important;
     position: relative;
     font-size: 20px !important;
+    overflow: hidden;
+
+    padding: 0;
+    margin: 0;
   }
 </style>

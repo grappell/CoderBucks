@@ -112,16 +112,24 @@
     elements.forEach((element) => {
       if (show) {
         element.style.opacity = "100";
-        card.position = "relative";
-        card.transform = "scale(-1000px)";
-        card.zIndex = "0";
+        element.style.zIndex = "0";
       } else {
-        card.zIndex = "2";
         element.style.opacity = "0";
-        card.position = "absolute";
-        card.transform = "scale(100vw)";
+        element.style.zIndex = "-10";
       }
     });
+
+    if (show) {
+      card.transform = "scale(-1000px)";
+      card.zIndex = "0";
+      card.position = "relative";
+    } else {
+      card.position = "relative";
+      card.transform = "scale(100vw)";
+      card.zIndex = "2";
+      card.position = "absolute";
+    }
+
     card.opacity = "100";
   }
 
@@ -141,7 +149,6 @@
     document
       .getElementById("teacher-store")
       .addEventListener("mouseover", async (event) => {
-        console.log(teacherProductSuperlist);
         openStore = true;
       });
     document
@@ -178,7 +185,7 @@
       </p>
     </div>
     <div
-      class="card-c card-tall card-wide"
+      class="card-store card-tall card-wide"
       id="teacher-store"
       style="background-image: url('https://media.wired.com/photos/5c9040ee4950d24718d6da99/1:1/w_1800,h_1800,c_limit/shoppingcart-1066110386.jpg');"
       on:pointerover={() => {
@@ -191,17 +198,15 @@
       {/if}
       {#if openStore}
         Store:
+        <hr />
         <!-- was working here -->
-        <div style="padding: 10%; font-size: 30px; overflow:scroll;">
-          <Row>
-            {#each teacherProductSuperlist as productList}
-              <Col md="4">
-                <Card product={productList} style="color: black;" />
-              </Col>
-            {/each}
-          </Row>
+        <div style="font-size: 20px; overflow:none;" class="flex-row">
+          {#each teacherProductSuperlist as productList}
+            <Col md="4">
+              <Card product={productList} />
+            </Col>
+          {/each}
         </div>
-        <!-- Here is something -->
       {/if}
     </div>
     <div
@@ -244,7 +249,8 @@
   }
 
   .card-c,
-  .card-nohover {
+  .card-nohover,
+  .card-store {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -263,6 +269,10 @@
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+  }
+
+  .card-store {
+    overflow: hidden;
   }
 
   .card-nohover {
@@ -311,6 +321,18 @@
     grid-column: span 4 / auto; */
   /* grid-row-start: 4; <-- was attempting to aimate this so that the trasition is less jarring */
   /* } */
+
+  .flex-row {
+    display: flex;
+    flex-direction: row;
+    gap: 1em;
+    /* align-items: center; */
+    justify-content: space-around;
+
+    /* background-color: red; */
+
+    max-width: max(50%, 1000px);
+  }
 
   .card-wide {
     grid-column: span 4 / auto;
