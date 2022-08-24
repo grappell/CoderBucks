@@ -12,14 +12,17 @@
 </script>
 
 <Card class="mb-3" style="width: min(100%, 300px); height: min(110%, 500px);">
-  <CardHeader>
-    <CardTitle style="color:black; text-align:center">{product.name}</CardTitle>
+  <CardHeader style="display: flex; flex-direction: column;">
+    <CardTitle
+      style="color:black; text-align:center; font-weight: 600; font-size: larger; justify-self: center; align-self: center;"
+      >{product.name}</CardTitle
+    >
   </CardHeader>
   <CardBody>
     <!-- svelte-ignore a11y-missing-attribute -->
     <img
       src={product.userImgUrl}
-      style="width: 80%; display: block; margin:auto;"
+      style="width: 95%; display: block; margin:auto; border-radius: 5px;"
     />
     <br />
     <CardText style="text-align: center; color:black;"

@@ -185,7 +185,7 @@
       </p>
     </div>
     <div
-      class="card-store card-tall card-wide"
+      class="card-store card-tall card-wide card-c"
       id="teacher-store"
       style="background-image: url('https://media.wired.com/photos/5c9040ee4950d24718d6da99/1:1/w_1800,h_1800,c_limit/shoppingcart-1066110386.jpg');"
       on:pointerover={() => {
@@ -263,7 +263,7 @@
     height: 100%;
     width: 100%;
     border-radius: 4px;
-    transition: all 500ms;
+    /* transition: all 500ms; */
     overflow: hidden;
 
     background-size: cover;
@@ -315,6 +315,12 @@
   #teacher-store {
     transition: all 1s;
   }
+
+  /* 
+  #teacher-store:hover ~ .card-c {
+    opacity: 0;
+    position: absolute;
+  } */
 
   /* #teacher-store:hover {
     grid-row: span 6 / auto;

@@ -3,6 +3,7 @@
   import { goto, prefetch } from "@sapper/app";
   import authStore from "../store/authStore";
   import { slugify } from "../helper";
+  import { getOrgNameFromCode, getTeacherEmails } from "../db";
 
   var errorMessage = "";
   var sucessMessage = "";
@@ -16,7 +17,7 @@
     try {
       var db = firebase.firestore();
       await firebase.auth().createUserWithEmailAndPassword(email, password);
-      if (tMail != undefined) {
+      if (tMail === undefined) {
         console.log(orgCode);
         let targetOrgName = "";
         await db
@@ -55,6 +56,15 @@
         let targetOrgName = "";
         let targetTeachName = "";
 
+        let teacherEmails = await getTeacherEmails(
+          await getOrgNameFromCode(studentOrgCode)
+        );
+        if (!teacherEmails.includes(tMail)) {
+          console.error(
+            new Error("Teacher email is invalid - teacher might not exist")
+          );
+        }
+
         console.log(tMail);
         const arrayUnion = firebase.firestore.FieldValue.arrayUnion;
         await db
@@ -91,6 +101,7 @@
               .where("email", "==", tMail)
               .get()
               .then(async (data2) => {
+                console.log(data2.docs);
                 let targetTeacher = data2.docs[0].ref;
                 let studentRef = db.doc(
                   `/organization/${targetOrgName}/students/${slugify(name)}`
@@ -107,7 +118,7 @@
       sucessMessage = "Success! Redirecting...";
     } catch (error) {
       console.error(error);
-      errorMessage = "Invalid Email or Password";
+      errorMessage = error;
       sucessMessage = "";
     }
   }

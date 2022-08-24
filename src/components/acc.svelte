@@ -133,7 +133,7 @@
 <div class="makeAcc" style="display: none;">
   <Row>
     <Col>
-      <FormGroup id="teacherForm">
+      <FormGroup id="teacherForm" style="display: none">
         <Label for="teacherCode" id="orgCode">Organization Code</Label>
         <Input
           type="text"

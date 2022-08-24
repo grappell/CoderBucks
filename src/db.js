@@ -42,6 +42,7 @@ export async function getTeacherEmails(orgName) {
 }
 
 
+
 export async function getTeacherProducts(
   orgName,
   teacherName
@@ -73,6 +74,21 @@ export async function getOrgCode(orgName) {
         returnData = "Error Getting Data";
       }
     });
+    return returnData;
+  }
+  
+  //brokey
+
+export async function getOrgNameFromCode(orgCode) {
+  throw new Error("This stuff is brokey :(")
+
+  var db = firebase.firestore();
+  let returnData;
+  await db.collection("organization").where("orgCode", "===", orgCode).get().then((data) => {
+    if (data.exists) {
+        returnData = data.data().name;
+      }
+  })
   return returnData;
 }
 
