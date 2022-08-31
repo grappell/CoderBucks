@@ -9,6 +9,8 @@
   var sucessMessage = "";
   async function loginWithEmail(event) {
     var email = event.detail.email;
+    email = email.toLowerCase();
+    console.log(email);
     var password = event.detail.password;
     var orgCode = event.detail.orgCode;
     var tMail = event.detail.tMail;
@@ -56,13 +58,13 @@
         let targetOrgName = "";
         let targetTeachName = "";
 
+        console.log(studentOrgCode, await getOrgNameFromCode(studentOrgCode));
+
         let teacherEmails = await getTeacherEmails(
           await getOrgNameFromCode(studentOrgCode)
         );
         if (!teacherEmails.includes(tMail)) {
-          console.error(
-            new Error("Teacher email is invalid - teacher might not exist")
-          );
+          throw new Error("Teacher email is invalid - teacher might not exist");
         }
 
         console.log(tMail);
@@ -117,6 +119,8 @@
       errorMessage = "";
       sucessMessage = "Success! Redirecting...";
     } catch (error) {
+      firebase.auth().currentUser.delete();
+
       console.error(error);
       errorMessage = error;
       sucessMessage = "";

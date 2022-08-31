@@ -64,30 +64,31 @@ export async function getOrgCode(orgName) {
   let returnData;
   var db = firebase.firestore();
   await db
-    .collection("organization")
-    .doc(orgName)
-    .get()
-    .then((data) => {
-      if (data.exists) {
-        returnData = data.data().orgCode;
-      } else {
-        returnData = "Error Getting Data";
-      }
-    });
-    return returnData;
-  }
+  .collection("organization")
+  .doc(orgName)
+  .get()
+  .then((data) => {
+    if (data.exists) {
+      returnData = data.data().orgCode;
+    } else {
+      returnData = "Error Getting Data";
+    }
+  });
+  return returnData;
+}
   
-  //brokey
 
 export async function getOrgNameFromCode(orgCode) {
-  throw new Error("This stuff is brokey :(")
-
   var db = firebase.firestore();
   let returnData;
-  await db.collection("organization").where("orgCode", "===", orgCode).get().then((data) => {
-    if (data.exists) {
-        returnData = data.data().name;
+  await db.collection("organization").where("orgCode", "==", orgCode).get().then((data) => {
+    if (data.docs[0].exists) {
+        returnData = data.docs[0].id;
       }
+    else{
+      console.error("Problem getting data in 'getOrgNameFormCode', current data: " + data)
+      console.log(data)
+    }
   })
   return returnData;
 }
@@ -177,6 +178,9 @@ export async function addStudentToTeacher(teacherEmail = "", studentPath, error_
 }
 
 
+
+//Todo: Someting here is broken, need to fix. Current error: line 'tName = data.docs[0].data().name' is breaking with the error 'Cannot read properties of undefined (reading 'data')';
+
 export async function getTeacherProductsWithEmail (teacherEmail, orgName) {
   let db = firebase.firestore();
   let tName = "";
@@ -191,3 +195,13 @@ export async function getTeacherProductsWithEmail (teacherEmail, orgName) {
     return { ...data.data(), id: data.id, teacherName: tName };
   })
 } 
+
+
+export function clearAllCache() {
+  try{
+    sessionStorage.clear()
+    return true
+  } catch {
+    return false
+  }
+}

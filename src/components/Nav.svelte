@@ -12,6 +12,7 @@
     DropdownMenu,
     DropdownItem,
   } from "sveltestrap/src";
+  import { clearAllCache } from "../db";
   import authStore from "../store/authStore";
 
   let isOpen = false;
@@ -23,6 +24,7 @@
   async function logOut() {
     authStore.set({ userId: undefined, fierbaseOn: true, isLogedIn: false });
     firebase.auth().signOut();
+    clearAllCache();
   }
 
   function logIn() {
