@@ -178,13 +178,17 @@ export async function addStudentToTeacher(teacherEmail = "", studentPath, error_
 }
 
 
-
 //Todo: Someting here is broken, need to fix. Current error: line 'tName = data.docs[0].data().name' is breaking with the error 'Cannot read properties of undefined (reading 'data')';
 
 export async function getTeacherProductsWithEmail (teacherEmail, orgName) {
+  return new Error("Problem Querring data, please come back at a later time")
   let db = firebase.firestore();
   let tName = "";
+  console.log(teacherEmail, orgName)
   let teacherPath = await db.collection(`organization/${orgName}/teachers/`).where("email", "==", teacherEmail).get().then((data) => {
+    if (data.empty){
+      return new Error("Invalid fetch perams")
+    }
     tName = data.docs[0].data().name;
     return data.docs[0].ref.path
   })
@@ -204,4 +208,8 @@ export function clearAllCache() {
   } catch {
     return false
   }
+}
+
+export async function checkOrgCode(orgCode) {
+  let res = await db.collection("organization").where("orgCode", "==", orgCode)
 }

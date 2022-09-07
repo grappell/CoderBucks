@@ -60,8 +60,6 @@
   });
 
   async function onNameSubmit() {
-    let popup = null;
-
     let suceeded = await addStudentToTeacher(
       classNameInput,
       $authStore.studentPath
@@ -70,21 +68,27 @@
     // todo: clear input opon sucess + others.
 
     if (suceeded[0]) {
-      buttonColor = "success";
-      popTitle = "Sucess!";
-      popSubT = "Class Sucessfully Added";
-      isGood = true;
-      showPopup = true;
+      displayPopup("success", "Sucess!", "Class Sucessfully Added", true);
     } else {
-      buttonColor = "danger";
-      popTitle = "Problem Adding to Class";
-      popSubT =
+      displayPopup(
+        "danger",
+        "Problem Adding to Class",
         "Class could not be added for the following reason: " +
-        suceeded[1] +
-        ".";
-      isGood = false;
-      showPopup = true;
+          suceeded[1] +
+          ".",
+        false
+      );
     }
+  }
+
+  function displayPopup(color, title, subTitle, good) {
+    let popup = null;
+
+    buttonColor = color;
+    popTitle = title;
+    popSubT = subTitle;
+    isGood = good;
+    showPopup = true;
 
     popup = new Popup({
       target: document.body,
@@ -141,7 +145,21 @@
     );
     await teacherEmails.forEach(async (email) => {
       let orgName = $authStore.studentPath.split("/")[1];
+      if (!$authStore.studentPath.split("/")[0].match("organization")) {
+        orgName = $authStore.studentPath.split("/")[2];
+      }
       let awaitBuffer = await getTeacherProductsWithEmail(email, orgName);
+      console.log(awaitBuffer);
+      if (awaitBuffer instanceof Error) {
+        displayPopup(
+          "danger",
+          awaitBuffer,
+          "Problem feching student products",
+          false
+        );
+        throw new Error(awaitBuffer);
+        console.log("gone");
+      }
       teacherProductSuperlist = teacherProductSuperlist.concat(awaitBuffer);
       awaitBuffer = null;
     });

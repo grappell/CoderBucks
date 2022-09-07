@@ -67,6 +67,8 @@
           throw new Error("Teacher email is invalid - teacher might not exist");
         }
 
+        // if(!)
+
         console.log(tMail);
         const arrayUnion = firebase.firestore.FieldValue.arrayUnion;
         await db
@@ -120,6 +122,13 @@
       sucessMessage = "Success! Redirecting...";
     } catch (error) {
       firebase.auth().currentUser.delete();
+
+      console.log(error.toString());
+
+      if (error.toString().match("reading 'exists'")) {
+        error =
+          "The Organization code is invalid - Make sure that it was entered correctly";
+      }
 
       console.error(error);
       errorMessage = error;

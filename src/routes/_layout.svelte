@@ -35,6 +35,8 @@
         authStore.set(JSON.parse(sessionStorageIn));
       }
     }
+
+    let db = firebase.firestore();
   });
 </script>
 
