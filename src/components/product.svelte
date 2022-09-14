@@ -11,6 +11,8 @@
   } from "sveltestrap/src";
 </script>
 
+<!-- todo: fix the styling for the card - currently using min(), want to use clamp() -->
+
 <Card class="mb-3" style="width: min(100%, 300px); height: min(110%, 500px);">
   <CardHeader style="display: flex; flex-direction: column;">
     <CardTitle
@@ -18,11 +20,11 @@
       >{product.name}</CardTitle
     >
   </CardHeader>
-  <CardBody>
-    <!-- svelte-ignore a11y-missing-attribute -->
+  <CardBody class="cardBody">
     <img
       src={product.userImgUrl}
       style="width: 95%; display: block; margin:auto; border-radius: 5px;"
+      alt="product img"
     />
     <br />
     <CardText style="text-align: center; color:black;"

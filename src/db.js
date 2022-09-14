@@ -144,7 +144,7 @@ export async function addStudentToTeacher(teacherEmail = "", studentPath, error_
   }
 
   //todo: Make it so that if the teacher already has an ref to the sudent, show a popup saying that "student is alrady added"
-  //PS: there is no need to change logic, as it uses a merege and will not add annother sudent ref. 
+  //PS: there is no need to change logic, as it uses a merge and will not add annother sudent ref. 
 
   try {
 
@@ -178,20 +178,21 @@ export async function addStudentToTeacher(teacherEmail = "", studentPath, error_
 }
 
 
-//Todo: Someting here is broken, need to fix. Current error: line 'tName = data.docs[0].data().name' is breaking with the error 'Cannot read properties of undefined (reading 'data')';
+//Todo: Something here is broken, need to fix. Current error: line 'tName = data.docs[0].data().name' is breaking with the error 'Cannot read properties of undefined (reading 'data')';
 
 export async function getTeacherProductsWithEmail (teacherEmail, orgName) {
-  return new Error("Problem Querring data, please come back at a later time")
   let db = firebase.firestore();
   let tName = "";
   console.log(teacherEmail, orgName)
   let teacherPath = await db.collection(`organization/${orgName}/teachers/`).where("email", "==", teacherEmail).get().then((data) => {
     if (data.empty){
-      return new Error("Invalid fetch perams")
+      throw new Error("Invalid fetch params")
     }
     tName = data.docs[0].data().name;
     return data.docs[0].ref.path
   })
+
+  // throw new Error("Problem Querying data, please come back at a later time")
   
   let productsUF = await db.doc(teacherPath).collection("products").get() //uf --> unfiltered
   
