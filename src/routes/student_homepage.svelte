@@ -132,6 +132,7 @@
       card.transform = "scale(100vw)";
       card.zIndex = "2";
       card.position = "absolute";
+      card.style.background = "rgb(255, 207, 104);";
     }
 
     card.opacity = "100";
@@ -166,6 +167,7 @@
         displayPopup("danger", data, "Problem feching student products", false);
       });
 
+    console.log(teacherProductSuperlist);
     // let awaitBuffer = await getTeacherProductsWithEmail(email, orgName);
     // console.log(awaitBuffer);
     // if (awaitBuffer instanceof Error) {
@@ -231,17 +233,18 @@
         Teacher Store
       {/if}
       {#if openStore}
-        Store:
-        <hr />
+        <p style="padding: 0; ">Store:</p>
+        <!-- <hr /> -->
         <!-- was working here -->
         <div
-          style="font-size: 20px; overflow-y:scroll; overflow-x:hidden;"
-          class="flex-row"
+          style="font-size: 20px; overflow-y:auto; overflow-x:hidden; height: 100%; "
+          class="flex-row storeBG"
         >
           {#each teacherProductSuperlist as teacherProductList}
             <div class="sorediv">
+              {teacherProductList[0].teacherName}'s Store
               {#each teacherProductList as productList}
-                <Col md="8">
+                <Col>
                   <Card product={productList} />
                 </Col>
               {/each}
@@ -402,13 +405,18 @@
     background-image: url("data:image/jpeg;base64,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");
   }
 
+  .storeBG {
+    background-color: rgb(242, 195, 74);
+  }
+
   .sorediv {
     width: 100%;
-    background-color: gray;
-    padding: 20px;
+    /* padding: 20px;
     padding-top: 30px;
     padding-bottom: 30px;
-    border-radius: 40px;
+    border-radius: 40px; */
+
+    padding: 0;
 
     display: flex;
     flex-direction: column;

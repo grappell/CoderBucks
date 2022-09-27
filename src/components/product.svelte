@@ -13,7 +13,10 @@
 
 <!-- todo: fix the styling for the card - currently using min(), want to use clamp() -->
 
-<Card class="mb-3" style="width: min(100%, 300px); height: min(110%, 500px);">
+<Card
+  class="mb-3"
+  style="width: min(100%, 300px); height: clamp(250px, 400px, 110%);"
+>
   <CardHeader style="display: flex; flex-direction: column;">
     <CardTitle
       style="color:black; text-align:center; font-weight: 600; font-size: larger; justify-self: center; align-self: center;"
