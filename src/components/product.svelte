@@ -15,7 +15,7 @@
 
 <Card
   class="mb-3"
-  style="width: min(100%, 300px); height: clamp(250px, 400px, 110%);"
+  style="width: min(100%, 300px); height: clamp(250px, 400px, 110%); margin-bottom: 50px !important;"
 >
   <CardHeader style="display: flex; flex-direction: column;">
     <CardTitle
@@ -26,7 +26,7 @@
   <CardBody class="cardBody">
     <img
       src={product.userImgUrl}
-      style="width: 95%; display: block; margin:auto; border-radius: 5px;"
+      style="width: 95%; display: block; border-radius: 5px;"
       alt="product img"
     />
     <br />
@@ -48,6 +48,28 @@
     overflow: hidden;
 
     padding: 0;
-    margin: 0;
+    /* margin: 0; */
+  }
+
+  /* width */
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px grey;
+    border-radius: 1px;
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: darkgray;
+    border-radius: 3px;
+  }
+
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: gray;
   }
 </style>

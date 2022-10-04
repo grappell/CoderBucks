@@ -120,6 +120,7 @@
       } else {
         element.style.opacity = "0";
         element.style.zIndex = "-10";
+        card.opacity = "100";
       }
     });
 
@@ -127,18 +128,17 @@
       card.transform = "scale(-1000px)";
       card.zIndex = "0";
       card.position = "relative";
+      card.background = null;
     } else {
       card.position = "relative";
       card.transform = "scale(100vw)";
       card.zIndex = "2";
       card.position = "absolute";
-      card.style.background = "rgb(255, 207, 104);";
+      card.background = "rgb(242, 195, 74)";
     }
 
     card.opacity = "100";
   }
-
-  // Todo: Make sure that when one teacher querry fails, then it cancels the rest of the teachers.
 
   onMount(async () => {
     teacherProductSuperlist = [];
@@ -223,7 +223,6 @@
     <div
       class="card-store card-tall card-wide card-c"
       id="teacher-store"
-      style="background-image: url('https://media.wired.com/photos/5c9040ee4950d24718d6da99/1:1/w_1800,h_1800,c_limit/shoppingcart-1066110386.jpg');"
       on:pointerover={() => {
         hoverChange(true);
       }}
@@ -358,6 +357,7 @@
 
   #teacher-store {
     transition: all 1s;
+    background-image: url("https://media.wired.com/photos/5c9040ee4950d24718d6da99/1:1/w_1800,h_1800,c_limit/shoppingcart-1066110386.jpg");
   }
 
   /* 
@@ -375,12 +375,11 @@
   .flex-row {
     display: flex;
     flex-direction: row;
-    gap: 1em;
+    row-gap: 100em;
     /* align-items: center; */
     justify-content: space-around;
 
     /* background-color: red; */
-
     max-width: max(50%, 1000px);
   }
 
@@ -407,6 +406,7 @@
 
   .storeBG {
     background-color: rgb(242, 195, 74);
+    row-gap: 1000px;
   }
 
   .sorediv {
