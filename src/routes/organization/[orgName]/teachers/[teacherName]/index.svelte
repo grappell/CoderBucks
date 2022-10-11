@@ -14,6 +14,7 @@
     Alert,
   } from "sveltestrap/src";
   import Product from "../../../../../components/product.svelte";
+  import AuthCheck from "../../../../../components/authCheck.svelte";
   const { page } = stores();
 
   $: capitalTeacherName =
@@ -95,54 +96,56 @@
 <h2>{capitalTeacherName}'s Homepage</h2>
 <br />
 
-<ListGroup>
-  <h4>Students:</h4>
-  {#each studentList as student}
-    <h5>{student.name}</h5>
-    <ListGroupItem tag="button"
-      >{student.name +
-        " - CoderBucks In account: " +
-        student.coderBucksObject[tmail].coderBucksValue}</ListGroupItem
-    >
-    <FormGroup>
-      <Input
-        type="number"
-        name="cbNumInput"
-        id="cbNumInputId"
-        placeholder="CoderBucks To assign"
-        bind:value={studentInput[student.name]}
-      />
-    </FormGroup>
-    <Button
-      id="submitButton"
-      outline
-      color="success"
-      class="float-right"
-      on:click={submit(student)}
-      size="block">Submit</Button
-    >
-  {/each}
-  {#if errorMessage != ""}
-    <Alert color="danger" dismissible>{errorMessage}</Alert>
-  {/if}
-  {#if sucessMessage != ""}
-    <br />
-    <Alert color="success" dismissible>{sucessMessage}</Alert>
-  {/if}
-  <br />
-  <!-- make the banner on ecach one and somehow make the id original -->
-</ListGroup>
-
-<ListGroup>
-  <h4>Products:</h4>
-</ListGroup>
-
-{#each productSuperList as productList}
-  <Row>
-    {#each productList as product}
-      <Col md="4">
-        <Product {product} />
-      </Col>
+<AuthCheck>
+  <ListGroup>
+    <h4>Students:</h4>
+    {#each studentList as student}
+      <h5>{student.name}</h5>
+      <ListGroupItem tag="button"
+        >{student.name +
+          " - CoderBucks In account: " +
+          student.coderBucksObject[tmail].coderBucksValue}</ListGroupItem
+      >
+      <FormGroup>
+        <Input
+          type="number"
+          name="cbNumInput"
+          id="cbNumInputId"
+          placeholder="CoderBucks To assign"
+          bind:value={studentInput[student.name]}
+        />
+      </FormGroup>
+      <Button
+        id="submitButton"
+        outline
+        color="success"
+        class="float-right"
+        on:click={submit(student)}
+        size="block">Submit</Button
+      >
     {/each}
-  </Row>
-{/each}
+    {#if errorMessage != ""}
+      <Alert color="danger" dismissible>{errorMessage}</Alert>
+    {/if}
+    {#if sucessMessage != ""}
+      <br />
+      <Alert color="success" dismissible>{sucessMessage}</Alert>
+    {/if}
+    <br />
+    <!-- make the banner on ecach one and somehow make the id original -->
+  </ListGroup>
+
+  <ListGroup>
+    <h4>Products:</h4>
+  </ListGroup>
+
+  {#each productSuperList as productList}
+    <Row>
+      {#each productList as product}
+        <Col md="4">
+          <Product {product} />
+        </Col>
+      {/each}
+    </Row>
+  {/each}
+</AuthCheck>

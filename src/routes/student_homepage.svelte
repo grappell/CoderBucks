@@ -140,6 +140,8 @@
     card.opacity = "100";
   }
 
+  let isBigScreen = false;
+
   onMount(async () => {
     teacherProductSuperlist = [];
 
@@ -192,7 +194,23 @@
       .addEventListener("mouseleave", async (event) => {
         openStore = false;
       });
+
+    window.addEventListener("resize", () => {
+      handleResize();
+    });
+
+    handleResize();
   });
+
+  function handleResize() {
+    let totalHeight = window.innerWidth;
+    if (totalHeight > 600) {
+      isBigScreen = true;
+    } else {
+      isBigScreen = false;
+    }
+    // console.log(totalHeight, isBigScreen);
+  }
 </script>
 
 <!-- things we want:
@@ -239,16 +257,30 @@
           style="font-size: 20px; overflow-y:auto; overflow-x:hidden; height: 100%; "
           class="flex-row storeBG"
         >
-          {#each teacherProductSuperlist as teacherProductList}
-            <div class="sorediv">
-              {teacherProductList[0].teacherName}'s Store
-              {#each teacherProductList as productList}
-                <Col>
-                  <Card product={productList} />
-                </Col>
+          {#if isBigScreen}
+            {#each teacherProductSuperlist as teacherProductList}
+              <div class="sorediv">
+                {teacherProductList[0].teacherName}'s Store
+                {#each teacherProductList as productList}
+                  <Col>
+                    <Card product={productList} />
+                  </Col>
+                {/each}
+              </div>
+            {/each}
+          {/if}
+          {#if !isBigScreen}
+            <Col>
+              {#each teacherProductSuperlist as teacherProductList}
+                <div class="sorediv">
+                  {teacherProductList[0].teacherName}'s Store
+                  {#each teacherProductList as productList}
+                    <Card product={productList} />
+                  {/each}
+                </div>
               {/each}
-            </div>
-          {/each}
+            </Col>
+          {/if}
         </div>
       {/if}
     </div>
@@ -312,6 +344,8 @@
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+
+    padding-bottom: 20px;
   }
 
   .card-store {
@@ -336,10 +370,11 @@
     gap: 1rem;
     grid-template-columns: repeat(auto, minmax(240px, 1fr));
     grid-template-rows: repeat(auto, minmax(240px, 77%));
-    transform: translateX(6vw);
-    /* ^^ this was making the width scale incorretly ar -600px */
+    transform: translateX(0.5vw);
+    /* ^^ this was making the width scale incorretly at -600px */
     grid-auto-rows: 10px;
-    grid-auto-columns: 10vh;
+    grid-auto-columns: 21vw;
+    padding: 5px;
   }
 
   .teacher-student-add {
@@ -409,6 +444,28 @@
     row-gap: 1000px;
   }
 
+  /* width */
+  .storeBG::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  /* Track */
+  .storeBG::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 3px grey;
+    border-radius: 1px;
+  }
+
+  /* Handle */
+  .storeBG::-webkit-scrollbar-thumb {
+    background: darkgray;
+    border-radius: 3px;
+  }
+
+  /* Handle on hover */
+  .storeBG::-webkit-scrollbar-thumb:hover {
+    background: gray;
+  }
+
   .sorediv {
     width: 100%;
     /* padding: 20px;
@@ -442,6 +499,7 @@
       grid-template-columns: repeat(auto, minmax(240px, 1fr));
       grid-auto-rows: 140px;
       grid-auto-columns: 19vw;
+      padding: 0;
     }
 
     .card-cb {

@@ -50,26 +50,4 @@
     padding: 0;
     /* margin: 0; */
   }
-
-  /* width */
-  ::-webkit-scrollbar {
-    width: 10px;
-  }
-
-  /* Track */
-  ::-webkit-scrollbar-track {
-    box-shadow: inset 0 0 5px grey;
-    border-radius: 1px;
-  }
-
-  /* Handle */
-  ::-webkit-scrollbar-thumb {
-    background: darkgray;
-    border-radius: 3px;
-  }
-
-  /* Handle on hover */
-  ::-webkit-scrollbar-thumb:hover {
-    background: gray;
-  }
 </style>

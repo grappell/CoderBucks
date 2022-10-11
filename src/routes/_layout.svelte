@@ -42,7 +42,7 @@
 
 <Nav {segment} />
 
-<Container>
+<Container style="margin-top: 50px">
   <slot />
 </Container>
 
