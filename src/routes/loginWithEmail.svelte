@@ -20,6 +20,9 @@
           user = await firebase
             .auth()
             .signInWithEmailAndPassword(email, password);
+        })
+        .catch((e) => {
+          throw new Error(e);
         });
 
       console.log(user);
