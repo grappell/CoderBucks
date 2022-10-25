@@ -10,6 +10,9 @@
   async function loginWithEmail(event) {
     var email = event.detail.email;
     var password = event.detail.password;
+
+    // TODO: Refactor data orginization to better follow MLM dubble lookup table
+
     try {
       let user;
 
@@ -37,6 +40,10 @@
             .where("userId", "==", user.user.uid)
             .get()
             .then((data) => {
+              if (!data.exists) {
+                throw new Error("This user is not a student");
+              }
+
               console.log("found your account :)", data.docs[0].data().userId);
 
               let fakeAuthStore = {
@@ -84,12 +91,31 @@
               } else {
                 console.log("is not student");
               }
+            })
+            .catch(async (e) => {
+              errorMessage = "Loading...";
+              console.error(e);
+
+              // console.log(user.user.uid);
+
+              await db
+                .collection(`/organization/${name}/teachers`)
+                .where("userId", "==", "Mq4JxJf5NRdx2XNxpeoOQ4IZGM43")
+                .get()
+                .then((data) => {
+                  console.log(data);
+
+                  if (!data.exists) throw new Error("This user does not exist");
+
+                  console.log(data);
+                });
             });
 
           errorMessage = "";
           sucessMessage = "Logged In!";
           await goto("/");
-        } catch {
+        } catch (e) {
+          console.error(e);
           // the only error we should recieving is the one saying that "data is undefined".
           //However if there is a ghost error, consider adding a console.error here :)
         }
